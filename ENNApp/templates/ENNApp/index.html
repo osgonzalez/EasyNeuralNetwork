@@ -2,7 +2,8 @@
 
 {% block mainBlock %} 
 
-    <form class=" animate" action="/action_page.php">
+    <form action="{% url 'testPost' %}" method="post">
+        {% csrf_token %}
         <div class="container">
         <label for="uname"><b>Username</b></label>
         <br> 
@@ -10,7 +11,7 @@
         <br><br>   
         <label for="psw"><b>Password</b></label>
         <br> 
-        <input type="password" placeholder="Enter Password" name="psw" required>
+        <input type="password" placeholder="Enter Password" name="upass" required>
         <br><br>   
         <button type="submit">Login</button>
         <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>

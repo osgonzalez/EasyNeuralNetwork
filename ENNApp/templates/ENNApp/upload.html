@@ -1,0 +1,19 @@
+{% extends './baseTemplate.html' %}
+
+{% block mainBlock %} 
+
+    <form id="uploadDataset" action="{% url 'addDataset' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="dataSet">Upload Dataset File</label>
+            <input id="dataSet" class="form-control-file" name="dataSet" type="file" />
+            <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
+        </div>
+       
+    </form>
+
+    <button id="submitUploadDataset" type="button" class="btn btn-primary">Upload</button>
+           
+     
+
+{% endblock %}

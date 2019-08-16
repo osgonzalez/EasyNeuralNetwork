@@ -7,7 +7,7 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
-
+from django.contrib.auth.models import User as userModel
 
 
 
@@ -103,18 +103,18 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
+
 def registerUser(request):
-    if request.method == "POST" and request.POST['username'] and request.POST['password']:
+    if request.method == "POST" and request.POST['username'] and request.POST['password'] and request.POST['userEmail']:
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            # Redirect to a success page.
-            return redirect('index')
+        email = request.POST['userEmail']
+
+        if userModel.objects.filter(username=username).exists():
+            return render(request, 'register.html', {'registerError': True})
         else:
-            # Return an 'invalid login' error message.
-            return render(request, 'login.html', {'loginError': True})
+            userModel.objects.create_user(username, email, password)
+            return redirect('login')
     else: 
         return render(request, 'register.html')
 

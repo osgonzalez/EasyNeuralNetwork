@@ -44,10 +44,10 @@ function hideCorrectMessage(){
 $(document).ready(function(){
   $( "#regiterButtom" ).click(function() {
 
-      var emailRegExp = '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
+      var emailRegExp = new RegExp(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/);
       if($("#inputPassword").val() != $("#inputConfirmPassword").val() 
           || $("#inputPassword").val() == ""
-          || !emailRegExp.test(String(email).toLowerCase())){
+          || !emailRegExp.test(String($("#inputEmail").val()).toLowerCase())){
         $("#registerError").show();
       }else{
         $("#registerForm").submit();

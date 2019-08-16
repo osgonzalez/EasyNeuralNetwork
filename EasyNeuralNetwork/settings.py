@@ -126,3 +126,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'userFiles')
 
 #This URL is to serve the files to the users
 MEDIA_URL = '/files/'
+
+#Login
+from django.urls import reverse_lazy
+
+LOGIN_URL = reverse_lazy('login')
+LOGIN_REDIRECT_URL = "uploadView/"
+LOGOUT_REDIRECT_URL = '/login/'

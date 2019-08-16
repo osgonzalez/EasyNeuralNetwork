@@ -3,9 +3,13 @@
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>Page Title</title>
+    <title>Easy Neural Network</title>
     <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/bootstrap.css' %}">
     <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/main.css' %}">
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/fontAwersome.css' %}">
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/template.css' %}">
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/dataTables.css' %}">
+    
     <!--<link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/bootstrap.min.css' %}">-->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -17,6 +21,7 @@
     </script>
     {% block header %} {% endblock %}
 </head>
+<!--
 <body>
     
     <div>
@@ -52,16 +57,168 @@
     <br>
 
     <div id="msjErr" class="alert alert-dismissible alert-danger" style="display: none;">
-        <!--<button type="button" class="close" data-dismiss="alert">&times;</button>-->
         <i class="fa fa-times-circle"></i>
         <strong id="errorBoldText"></strong> <span id="errorText"></span>
     </div>
 
+    <div id="msjCorrect" class="alert alert-dismissible alert-success" style="display: none;">
+        <i class="fa fa-check-circle"></i>
+        <strong id="correctBoldText"></strong> <span id="correctText"></span>
+    </div>
+
     <div class="mainBlock">
-    {% block mainBlock %} {% endblock %}
     </div>
     
     <script src="{% static 'js/main.js' %}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </body>
+-->
+<body id="page-top">
+
+    <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+  
+      <a class="navbar-brand mr-1" href="index.html">Start Bootstrap</a>
+  
+      <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+        <i class="fas fa-bars"></i>
+      </button>
+  
+      <!-- Navbar Search -->
+      <div id="userNameLabel" class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+        <div>
+            {% if user.is_authenticated %}
+            <span>Hi {{ user.username }}</span> 
+          {% else %}
+          <a href="{% url 'login' %}">You are not logged in</a>
+          {% endif %}
+        </div>        
+      </div>
+  
+      <!-- Navbar -->
+      <ul class="navbar-nav ml-auto ml-md-0">
+          <a href="{% url 'logout' %}">
+              <!--<i id="logOutIcon" class="fas fa-power-off"></i>-->
+              <i id="logOutIcon" class="fas fa-sign-out-alt"></i>
+          </a>
+      </ul>
+  
+    </nav>
+  
+    <div id="wrapper">
+  
+      <!-- Sidebar -->
+      <ul class="sidebar navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="index.html">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Pages</span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <h6 class="dropdown-header">Login Screens:</h6>
+            <a class="dropdown-item" href="login.html">Login</a>
+            <a class="dropdown-item" href="register.html">Register</a>
+            <a class="dropdown-item" href="forgot-password.html">Forgot Password</a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header">Other Pages:</h6>
+            <a class="dropdown-item" href="404.html">404 Page</a>
+            <a class="dropdown-item" href="blank.html">Blank Page</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="charts.html">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Charts</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="tables.html">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Tables</span></a>
+        </li>
+      </ul>
+  
+      <div id="content-wrapper">
+  
+        <div class="container-fluid">
+  
+            <div id="msjErr" class="alert alert-dismissible alert-danger" style="display: none;">
+                <i class="fa fa-times-circle"></i>
+                <strong id="errorBoldText"></strong> <span id="errorText"></span>
+            </div>
+        
+            <div id="msjCorrect" class="alert alert-dismissible alert-success" style="display: none;">
+                <i class="fa fa-check-circle"></i>
+                <strong id="correctBoldText"></strong> <span id="correctText"></span>
+            </div>
+        
+            <div class="mainBlock">
+                {% block mainBlock %} {% endblock %}
+            </div>
+         
+        </div>
+        <!-- /.container-fluid -->
+  
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Easy Neural Network - Óscar Servia González</span>
+            </div>
+          </div>
+        </footer>
+  
+      </div>
+      <!-- /.content-wrapper -->
+  
+    </div>
+    <!-- /#wrapper -->
+  
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+  
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="login.html">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'js/jquery.easing.min.js' %}"></script>
+  
+    <!-- Page level plugin JavaScript-->
+    <script src="{% static 'js/Chart.js' %}"></script>
+    <script src="{% static 'js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'js/dataTables.bootstrap4.js' %}"></script>
+  
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'js/template.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+  
+  </body>
+
+
 </html>

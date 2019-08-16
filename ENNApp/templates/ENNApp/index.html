@@ -2,20 +2,13 @@
 
 {% block mainBlock %} 
 
-    <form action="{% url 'testPost' %}" method="post">
-        {% csrf_token %}
-        <div class="container">
-        <label for="uname"><b>Username</b></label>
-        <br> 
-        <input type="text" placeholder="Enter Username" name="uname" required>
-        <br><br>   
-        <label for="psw"><b>Password</b></label>
-        <br> 
-        <input type="password" placeholder="Enter Password" name="upass" required>
-        <br><br>   
-        <button type="submit">Login</button>
-        <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-        </div>
-    </form>
+  <h1>Index view!!!!</h1>
+  {% if user.is_authenticated %}
+    <p>Hi {{ user.username }}</p>
+  {% else %}
+    <p>You are not logged in</p>
+    <a href="{% url 'login' %}">login</a>
+  {% endif %}
+
 
 {% endblock %}

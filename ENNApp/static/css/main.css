@@ -2,10 +2,38 @@
 
 
 #msjErr i{
-    font-size:18px;
+    font-size:20px;
     color:#c00000;
 }
 
 #msjErr strong,span{
     font-size:18px;
 }
+
+#msjCorrect i{
+    font-size:20px;
+    color:#19b900;
+}
+
+#msjCorrect strong,span{
+    font-size:18px;
+}
+
+#loginError i,strong,span{
+    font-size:16px;
+}
+
+#logOutIcon{
+    font-size:28px;
+    color:#ff0000;
+}
+
+
+#userNameLabel{
+    color:white;
+}
+
+#registerError span{
+    font-size:16px;
+}
+

@@ -5,6 +5,11 @@ from django.http import Http404
 from django.urls import reverse
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import redirect
+
+
+
 
 
 
@@ -17,7 +22,7 @@ from .models import Question, DataSet
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+    return render(request, 'ENNApp/index.html', {})
 
 def vistaPrueba(request, numero):
     context = {
@@ -62,6 +67,9 @@ def addDataset(request):
         #print(dataSetFile.name)
         #print(dataSetFile.size)
     return HttpResponse("oks")
+
+
+
 '''
 if request.method == 'POST' and request.FILES['dataSet']:
     dataSetFile = request.FILES["dataSet"]
@@ -73,3 +81,40 @@ if request.method == 'POST' and request.FILES['dataSet']:
     })
 return render(request, 'core/simple_upload.html')
 '''
+
+
+def loginUser(request):
+    if request.method == "POST" and request.POST['username'] and request.POST['password']:
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            # Redirect to a success page.
+            return redirect('index')
+        else:
+            # Return an 'invalid login' error message.
+            return render(request, 'login.html', {'loginError': True})
+    else: 
+        return render(request, 'login.html')
+
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
+
+def registerUser(request):
+    if request.method == "POST" and request.POST['username'] and request.POST['password']:
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            # Redirect to a success page.
+            return redirect('index')
+        else:
+            # Return an 'invalid login' error message.
+            return render(request, 'login.html', {'loginError': True})
+    else: 
+        return render(request, 'register.html')
+

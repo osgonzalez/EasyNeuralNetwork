@@ -1,0 +1,78 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Easy Neural Network</title>
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/bootstrap.css' %}">
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/main.css' %}">
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/fontAwersome.css' %}">
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/template.css' %}">
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/dataTables.css' %}">
+    
+    <!--<link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/bootstrap.min.css' %}">-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    {% csrf_token %}
+    <script type="text/javascript">
+    // using jQuery
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+    </script>
+    {% block header %} {% endblock %}
+</head>
+<body class="bg-dark">
+
+  <div class="container">
+    <div class="card card-login mx-auto mt-5">
+      <div class="card-header">Login</div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            {% if loginError %}
+              <div id="loginError" class="alert alert-dismissible alert-danger">
+                  <i class="fa fa-times-circle"></i>
+                  <strong> </strong><span>Incorrect username or password</span>
+              </div>
+            {% endif %}
+            <div class="form-label-group">
+              <input name="username" type="text" id="inputUserName" class="form-control" placeholder="User Name" required="required" autofocus="autofocus">
+              <label for="inputUserName">User</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-label-group">
+              <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="required">
+              <label for="inputPassword">Password</label>
+            </div>
+          </div>
+          <br>
+          <input type="submit" value="Login" class="btn btn-primary btn-block" >
+        </form>
+        <div class="text-center">
+          <a class="d-block small mt-3" href="{% url 'register' %}">Register an Account</a>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'js/jquery.easing.min.js' %}"></script>
+  
+    <!-- Page level plugin JavaScript-->
+    <script src="{% static 'js/Chart.js' %}"></script>
+    <script src="{% static 'js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'js/dataTables.bootstrap4.js' %}"></script>
+  
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'js/template.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+  
+  </body>
+
+
+</html>

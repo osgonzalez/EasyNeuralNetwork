@@ -5,10 +5,10 @@
     <meta charset='utf-8'>
     <title>Easy Neural Network</title>
     <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/bootstrap.css' %}">
-    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/main.css' %}">
     <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/fontAwersome.css' %}">
     <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/template.css' %}">
     <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/dataTables.css' %}">
+    <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/main.css' %}">
     
     <!--<link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/bootstrap.min.css' %}">-->
 
@@ -165,6 +165,22 @@
                 <i class="fa fa-check-circle"></i>
                 <strong id="correctBoldText"></strong> <span id="correctText"></span>
             </div>
+
+            {% if messageOk %}
+            <div class="msjCorrect alert alert-dismissible alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <i class="fa fa-check-circle"></i>
+                <strong></strong> <span>{{messageOk}}</span>
+            </div>
+            {% endif %}
+
+            {% if messageErr %}
+            <div class="msjErr alert alert-dismissible alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <i class="fa fa-times-circle"></i>
+                <strong></strong> <span>{{messageErr}}</span>
+            </div>
+            {% endif %}
         
             <div class="mainBlock">
                 {% block mainBlock %} {% endblock %}

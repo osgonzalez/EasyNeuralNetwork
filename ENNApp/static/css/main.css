@@ -37,3 +37,56 @@
     font-size:16px;
 }
 
+#gotoUploadViewButtom{
+    margin: auto;
+    display: block;
+}
+
+.buttomGroup{
+    padding: 10px;
+    font-size: 20px;
+}
+
+.downloadbuttom{
+    padding: 12px;
+    color:#6c81f7
+}
+
+.downloadbuttom:hover{
+    color:#0026ff
+}
+
+.deletebuttom{
+    color:#ff8484
+}
+
+.deletebuttom:hover{
+    color:#ff0000
+}
+
+.editbuttom{
+    color:#2faf6a
+}
+
+.editbuttom:hover{
+    color:#21fa85
+}
+
+
+.msjErr i{
+    font-size:20px;
+    color:#c00000;
+}
+
+.msjErr strong,span{
+    font-size:18px;
+}
+
+.msjCorrect i{
+    font-size:20px;
+    color:#19b900;
+}
+
+.msjCorrect strong,span{
+    font-size:18px;
+}

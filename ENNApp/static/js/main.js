@@ -58,9 +58,24 @@ $(document).ready(function(){
 });
 
 
+//Delete modal
+$(document).on("click", ".deletebuttom", function () {
+  var myBookId = $(this).data('url');
+  $("#deleteButonModal").click(function() {
+    location.href=myBookId;
+  });
+});
+
 // Call the dataTables jQuery plugin
 $(document).ready(function() {
-    $('.dataTable').DataTable();
+    $('.dataTable').DataTable({
+      "columns": [
+        { "orderable": true },
+        { "orderable": true },
+        { "orderable": true },
+        { "orderable": false }
+      ]
+    });
   });
   
 /*

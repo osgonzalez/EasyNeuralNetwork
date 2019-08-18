@@ -18,6 +18,7 @@
                   <th>Creation Date</th>
                   <th>Size</th>
                   <th></th>
+
                 </tr>
               </thead>
               <tfoot>
@@ -34,15 +35,46 @@
                         <td>{{ dataset.name }}</td>
                         <td>{{ dataset.creationDate }}</td>
                         <td>{{ dataset.size }}</td>
-                        <td>Eliminar</td>
+                        <td>
+                            <form class="form-inline" >
+                                <div class="buttomGroup form-group">
+                                    <i class="editbuttom fas fa-edit"></i>
+                                    <i onclick="location.href='{{ dataset.url }}';" class="downloadbuttom fas fa-file-download"></i>
+                                    <i class="deletebuttom far fa-trash-alt" data-toggle="modal" data-target="#DeleteMessageModal" data-url="{{ dataset.deleteUrl }}"></i>
+                                </div>
+                            </form>
+                        </td>  
                     </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
+          <br>
+          <button type="button" id="gotoUploadViewButtom" onclick="location.href='{% url 'uploadView' %}';" class="btn btn-primary centerButtom">Add New DataSet</button>
         </div>
         <div class="card-footer small text-muted"></div>
+
       </div>
 
+      <!-- Modal -->
+        <div class="modal fade" id="DeleteMessageModal" tabindex="-1" role="dialog" aria-labelledby="Delete Confirmation" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Delete Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Do you really want to delete these dataset? This process cannot be undone.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+                        <button type="button" id="deleteButonModal" class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 {% endblock %}

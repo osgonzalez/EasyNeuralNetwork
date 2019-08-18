@@ -87,7 +87,7 @@
       <div id="userNameLabel" class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
         <div>
             {% if user.is_authenticated %}
-            <span>Hi {{ user.username }}</span> 
+            <span>Hi {{ user.username | capfirst}}</span> 
           {% else %}
           <a href="{% url 'login' %}">You are not logged in</a>
           {% endif %}
@@ -136,9 +136,9 @@
             <span>Charts</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="tables.html">
+          <a class="nav-link" href="{% url 'listDatasets' %}">
             <i class="fas fa-fw fa-table"></i>
-            <span>Tables</span></a>
+            <span>DataSets</span></a>
         </li>
         <!--Custom-->
         {% if user.is_superuser %}

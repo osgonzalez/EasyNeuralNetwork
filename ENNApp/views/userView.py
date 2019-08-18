@@ -8,28 +8,27 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 from django.contrib.auth.models import User as userModel
+from django.contrib.auth.decorators import login_required
 
-
-
-
-
-
-# Import Models
-from .models import Question, DataSet
 
 
 # Views 
 
 
+@login_required(login_url='/login/')
 def index(request):
     return render(request, 'ENNApp/index.html', {})
 
+'''
+@login_required(login_url='/login/')
 def vistaPrueba(request, numero):
     context = {
         'number': numero,
     }
     return render(request, 'ENNApp/index.html', context)
 
+
+@login_required(login_url='/login/')
 def detail(request, question_id):
     try:
         question = Question.objects.get(pk=question_id)
@@ -38,6 +37,7 @@ def detail(request, question_id):
     return render(request, 'ENNApp/detail.html', {'question': question})
 
 
+@login_required(login_url='/login/')
 def testPost(request):
     test= request.POST["uname"]
     print("stop")
@@ -48,26 +48,30 @@ def testPost(request):
         return HttpResponse("oks -> user: "+ request.POST["uname"] + " pass: " + request.POST["upass"] )
 
 
+@login_required(login_url='/login/')
 def testForm(request):
     context = {
         'number': 23,
     }
     return render(request, 'ENNApp/index.html', context)
-
+'''
 #-------------------------------------------------------------------------------------------#
-
+'''
+@login_required(login_url='/login/')
 def uploadView(request):
     return render(request, 'ENNApp/upload.html')
 
+@login_required(login_url='/login/')
 def addDataset(request):
     if request.method == "POST" and request.FILES['dataSet']:
         dataSetFile = request.FILES["dataSet"]
         fileSystem = FileSystemStorage()
-        filename = fileSystem.save(dataSetFile.name, dataSetFile)
+        userName = request.user.username
+        filename = fileSystem.save( userName + "/datasets/" + dataSetFile.name, dataSetFile)
         #print(dataSetFile.name)
         #print(dataSetFile.size)
     return HttpResponse("oks")
-
+'''
 
 
 '''
@@ -113,8 +117,25 @@ def registerUser(request):
         if userModel.objects.filter(username=username).exists():
             return render(request, 'register.html', {'registerError': True})
         else:
-            userModel.objects.create_user(username, email, password)
+            newUser = userModel.objects.create_user(username, email, password)
+            #newUser.last_name = request.POST['lastName']
+            #newUser.first_name = request.POST['firstName']
+            #newUser.save()
             return redirect('login')
     else: 
         return render(request, 'register.html')
 
+'''
+@login_required(login_url='/login/')
+def listDatasets(request):
+    dataSetUrl = "/files/" + request.user.username + "/datasets/"
+
+    import os
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    dataSetsPath = os.path.join(BASE_DIR, str("userFiles/" +  request.user.username + "/datasets/"))
+    onlyfiles = [f for f in os.listdir(dataSetsPath) if os.path.isfile(os.path.join(dataSetsPath, f))]
+    
+    #return HttpResponse(str(onlyfiles))
+    return render(request, 'ENNApp/listDataset.html', {'loginError': True})
+    #return HttpResponse(' <a href="' + dataSetUrl + '">Login Page</a>')
+    '''

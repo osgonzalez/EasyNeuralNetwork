@@ -1,0 +1,48 @@
+{% extends './baseTemplate.html' %}
+
+{% block mainBlock %} 
+
+
+           
+     <!-- DataTable -->
+     <div class="card mb-3">
+        <div class="card-header">
+          <i class="fas fa-table"></i>
+          DataSets List</div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Creation Date</th>
+                  <th>Size</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>Name</th>
+                  <th>Creation Date</th>
+                  <th>Size</th>
+                  <th></th>
+                </tr>
+              </tfoot>
+              <tbody>
+                {% for dataset in datasets %}
+                    <tr>
+                        <td>{{ dataset.name }}</td>
+                        <td>{{ dataset.creationDate }}</td>
+                        <td>{{ dataset.size }}</td>
+                        <td>Eliminar</td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer small text-muted"></div>
+      </div>
+
+
+{% endblock %}

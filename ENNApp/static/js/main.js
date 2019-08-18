@@ -68,7 +68,18 @@ $(document).on("click", ".deletebuttom", function () {
 
 // Call the dataTables jQuery plugin
 $(document).ready(function() {
-    $('.dataTable').DataTable({
+  if(isAdmin){
+    $('.dataSetTable').DataTable({
+      "columns": [
+        { "orderable": true },
+        { "orderable": true },
+        { "orderable": true },
+        { "orderable": true },
+        { "orderable": false }
+      ]
+    });
+  }else{
+    $('.dataSetTable').DataTable({
       "columns": [
         { "orderable": true },
         { "orderable": true },
@@ -76,6 +87,8 @@ $(document).ready(function() {
         { "orderable": false }
       ]
     });
+  }
+    
   });
   
 /*

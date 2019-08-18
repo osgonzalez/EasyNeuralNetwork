@@ -33,14 +33,32 @@ def listDatasets(request):
 
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     dataSetsPath = os.path.join(BASE_DIR, "userFiles", request.user.username , "datasets")
-    
-    #datasets = [f for f in os.listdir(dataSetsPath) if os.path.isfile(os.path.join(dataSetsPath, f))]
-    datasets = []
-    for file in os.listdir(dataSetsPath):
-        filepath = os.path.join(dataSetsPath, file)
-        if os.path.isfile(filepath):
-            datasets.append({"name": file, "creationDate": time.ctime(os.path.getctime(filepath)), "size": convert_size(os.path.getsize(filepath)), "url": ( downloadDataSetUrl + file), "deleteUrl": deleteDataSetUrl + file + "/"})
-    context = {'datasets': datasets}
+
+    context = {}
+
+    if not os.path.exists(dataSetsPath):
+        context.update({'secondaryMessageErr': "You haven't any dataset yet"})
+    else:
+        datasets = []
+        for file in os.listdir(dataSetsPath):
+            filepath = os.path.join(dataSetsPath, file)
+            if os.path.isfile(filepath):
+                datasets.append({"name": file, "userOwner": request.user.username , "creationDate": time.ctime(os.path.getctime(filepath)), "size": convert_size(os.path.getsize(filepath)), "url": ( downloadDataSetUrl + file), "deleteUrl": deleteDataSetUrl + file + "/"})
+        
+        if request.user.is_superuser:
+            baseDatasetPath = os.path.join(BASE_DIR, "userFiles")
+            for userDir in os.listdir(baseDatasetPath):
+                if userDir != request.user.username:
+                    deleteDataSetUrl = "/deleteDataset/" + userDir + "/"
+                    userDatasetPath = os.path.join(baseDatasetPath, userDir, "datasets") 
+                    downloadDataSetUrl = "/files/" + userDir + "/datasets/"
+                    for file in os.listdir(userDatasetPath):
+                        filepath = os.path.join(userDatasetPath, file)
+                        if os.path.isfile(filepath):
+                            datasets.append({"name": file, "userOwner": userDir , "creationDate": time.ctime(os.path.getctime(filepath)), "size": convert_size(os.path.getsize(filepath)), "url": ( downloadDataSetUrl + file), "deleteUrl": deleteDataSetUrl + file + "/"})
+        
+             
+        context.update({'datasets': datasets})
     
     loadContextMessages(request,context)
     

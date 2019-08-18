@@ -18,6 +18,10 @@
     <script type="text/javascript">
     // using jQuery
     var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+    var isAdmin = false;
+    {% if user.is_superuser %}
+      isAdmin = true;
+    {% endif %}
     </script>
     {% block header %} {% endblock %}
 </head>
@@ -179,6 +183,14 @@
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <i class="fa fa-times-circle"></i>
                 <strong></strong> <span>{{messageErr}}</span>
+            </div>
+            {% endif %}
+
+            {% if secondaryMessageErr %}
+            <div class="msjErr alert alert-dismissible alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <i class="fa fa-times-circle"></i>
+                <strong></strong> <span>{{secondaryMessageErr}}</span>
             </div>
             {% endif %}
         

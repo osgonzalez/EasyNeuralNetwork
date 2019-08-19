@@ -144,6 +144,11 @@
             <i class="fas fa-fw fa-table"></i>
             <span>DataSets</span></a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'listNeuralNetwork' %}">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Neural Network</span></a>
+        </li>
         <!--Custom-->
         {% if user.is_superuser %}
         <li class="nav-item">

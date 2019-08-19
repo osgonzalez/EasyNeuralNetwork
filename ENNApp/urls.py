@@ -2,6 +2,7 @@ from django.urls import path
 #from . import views
 from .views import userView
 from .views import datasetView
+from .views import neuralNetworkView
 from django.conf import settings
 from django.conf.urls.static import static
 #from django.contrib.auth import views as auth_views
@@ -18,6 +19,8 @@ urlpatterns = [
     path('addDataset/', datasetView.addDataset, name='addDataset'),
     path('listDatasets/', datasetView.listDatasets, name='listDatasets'),
     path('deleteDataset/<str:userName>/<str:fileName>/', datasetView.deleteDataset, name='deleteDataset'),
+    path('listNeuralNetwork/', neuralNetworkView.listNeuralNetwork, name='listNeuralNetwork'),
+    path('deleteNeuralNetwork/<str:userName>/<str:fileName>/', neuralNetworkView.deleteNeuralNetwork, name='deleteNeuralNetwork'),
     #path('deleteDataset/', datasetView.deleteDataset, name='deleteDataset'),
     path('login/', userView.loginUser, name='login'),
     path('logout/', userView.logoutUser, name='logout'),

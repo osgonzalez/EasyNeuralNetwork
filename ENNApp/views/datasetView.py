@@ -11,6 +11,7 @@ from django.contrib.auth.models import User as userModel
 from django.contrib.auth.decorators import login_required
 import os, time
 import math
+from ..common import preprocessing
 
 
 @login_required(login_url='/login/')
@@ -63,7 +64,6 @@ def listDatasets(request):
     loadContextMessages(request,context)
     
     return render(request, 'ENNApp/listDataset.html', context)
-    #return HttpResponse(' <a href="' + dataSetUrl + '">Login Page</a>')
 
 
 def convert_size(size_bytes):
@@ -91,6 +91,26 @@ def deleteDataset(request, userName, fileName):
         request.session['messageErr'] = "An error occurred deleting the file"
     return redirect('listDatasets')
 
+
+
+@login_required(login_url='/login/')
+def showDatasetSample(request, filename):
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    dataSetsPath = os.path.join(BASE_DIR, "userFiles", request.user.username , "datasets", filename)
+
+    context = {}
+
+    if not os.path.exists(dataSetsPath):
+        context.update({'secondaryMessageErr': "this file does not exist"})
+    else:
+       
+        getSamples(20,dataSetsPath)
+             
+        #context.update({'datasets': datasets})
+    
+    loadContextMessages(request,context)
+    return HttpResponse("oks")
+    #return render(request, 'ENNApp/listDataset.html', context)
 
 
 def loadContextMessages(request,context):

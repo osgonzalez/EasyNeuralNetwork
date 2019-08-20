@@ -1,0 +1,208 @@
+{% extends './baseTemplate.html' %}
+
+{% block mainBlock %}
+
+
+
+
+
+
+<!-- DataTable -->
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Dataset Preview 
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            {% autoescape off %}
+            {{tablehtml}}
+            {% endautoescape %}
+        </div>
+        <br>
+        <button type="button" id="gotoUploadViewButtom" onclick="location.href='{% url 'uploadView' %}';"
+            class="btn btn-primary centerButtom">Add New neuralNetwork (TODO)</button>
+    </div>
+    <div class="card-footer small text-muted"></div>
+</div>
+
+
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Dataset Corelation </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            {% autoescape off %}
+            {{corr}}
+            {% endautoescape %}
+        </div>
+    </div>
+    <div class="card-footer small text-muted"></div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Dataset Description </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            {% autoescape off %}
+            {{description}}
+            {% endautoescape %}
+        </div>
+    </div>
+    <div class="card-footer small text-muted"></div>
+</div>
+
+<!--Base Preprocessing Form--><!--
+<div>
+    <form action="">
+        <fieldset>
+            <legend>Custom forms</legend>
+            <div class="form-group">
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="radioOverwriteFile" name="OverwriteFile" class="custom-control-input" value="True" checked>
+                    <label class="custom-control-label" for="radioOverwriteFile">Overwrite current file ("{{datasetName}}")</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="radioNotOverwriteFile" name="OverwriteFile" class="custom-control-input" value="False">
+                    <label class="custom-control-label" for="radioNotOverwriteFile">Save as a different File</label>
+                </div>
+                <div class="form-group col-sm-12">
+                    <label class="customDisable col-form-label col-form-label-sm" id="newFileNameLabel" for="inputSmall">New DatasetName</label>
+                    <input class="form-control form-control-sm" type="text" value="{{datasetName}}" id="newFileName" disabled="">
+                </div>             
+            </div>
+            <div class="form-group">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck1" checked="">
+                <label class="custom-control-label" for="customCheck1">Check this custom checkbox</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck2" disabled="">
+                <label class="custom-control-label" for="customCheck2">Disabled custom checkbox</label>
+            </div>
+            </div>
+            <div class="form-group">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="customSwitch1" checked="">
+                <label class="custom-control-label" for="customSwitch1">Toggle this switch element</label>
+            </div>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" disabled="" id="customSwitch2">
+                <label class="custom-control-label" for="customSwitch2">Disabled switch element</label>
+            </div>
+            </div>
+            <div class="form-group">
+            <select class="custom-select">
+                <option selected="">Open this select menu</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+            </select>
+            </div>
+        </fieldset>
+    </form>
+</div>
+-->
+<!--END Base Preprocessing Form-->
+
+<!--Test-->
+
+<div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-table"></i>
+            Dataset Preview 
+        </div>
+        <div class="card-body">
+                <div class="stepForm">
+                        <form id="regForm" action="">
+                          
+                          <!--<h1>Register:</h1> -->
+                          <div class="tab">            
+                              <div class="form-group">
+                                <h4>Que deseas hacer?</h4>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="radioOverwriteFile" name="OverwriteFile" class="custom-control-input" value="True" checked>
+                                    <label class="custom-control-label" for="radioOverwriteFile">Overwrite current file ("{{datasetName}}")</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="radioNotOverwriteFile" name="OverwriteFile" class="custom-control-input" value="False">
+                                    <label class="custom-control-label" for="radioNotOverwriteFile">Save as a different File</label>
+                                </div>
+                                <div class="form-group col-sm-12">
+                                    <label class="customDisable col-form-label col-form-label-sm" id="newFileNameLabel" for="inputSmall">New DatasetName</label>
+                                    <input class="form-control form-control-sm" type="text" value="{{datasetName}}" id="newFileName" disabled="">
+                                </div>             
+                            </div>
+                          </div>
+                          <!--Tab-->
+                          <div class="tab">            
+                                <div class="form-group">
+                                    <h4>Que deseas hacer?</h4>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio"  name="normalize" id="normalizeA" class="custom-control-input" value="Serialize" checked>
+                                        <label class="custom-control-label" for="normalizeA">Selialize</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio"  name="normalize" id="normalizeB" class="custom-control-input" value="Normalize">
+                                        <label class="custom-control-label" for="normalizeB">Normalize</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" name="normalize" id="normalizeC" class="custom-control-input" value="None">
+                                        <label class="custom-control-label" for="normalizeC">None</label>
+                                    </div>                                            
+                                </div>
+                            </div>
+                          <!--End Tab-->
+                        <!--Tab-->
+                        <div class="tab">            
+                                <div class="form-group">
+                                    <h4>Que deseas hacer con los nulos?</h4>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio"  name="valuesNull" id="valuesNullA" class="custom-control-input" value="" checked>
+                                        <label class="custom-control-label" for="valuesNullA">Numeros</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" name="valuesNull" id="valuesNullB" class="custom-control-input" value="None">
+                                        <label class="custom-control-label" for="valuesNullB">None</label>
+                                    </div>                                            
+                                </div>
+                            </div>
+                            <!--End Tab-->
+                            <div class="tab">            
+                                <div class="form-group">
+                                    <h4>Elije el target!</h4>
+                                    <div class="form-group">
+                                        <select class="custom-select">
+                                            {% for coll in collNames %}
+                                            <option value="{{coll}}" {% if forloop.last %} selected {% endif %}>{{coll}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>                                      
+                                </div>
+                            </div>
+                            <!--End Tab-->
+                          <div class="divStepButtons">
+                            <button type="button" class="btn btn-primary" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                            <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                          </div>
+                          <!-- Circles which indicates the steps of the form: -->
+                          <div class="stepCircleIndicator">
+                            <span class="step"></span>
+                            <span class="step"></span>
+                            <span class="step"></span>
+                            <span class="step"></span>
+                          </div>
+                        </form>
+                      </div>
+        </div>
+    <div class="card-footer small text-muted"></div>
+</div>
+
+
+    
+        
+
+{% endblock %}

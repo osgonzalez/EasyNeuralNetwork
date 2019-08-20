@@ -15,6 +15,15 @@ $(document).ready(function(){
     });
 });
 
+/*
+var url = new URL("http://foo.bar/?x=1&y=2");
+
+// If your expected result is "http://foo.bar/?x=1&y=2&x=42"
+url.searchParams.append('x', 42);
+
+// If your expected result is "http://foo.bar/?x=42&y=2"
+url.searchParams.set('x', 42);
+*/
 
 function showError(menssage, boldMensage=""){
     hideError();
@@ -87,9 +96,57 @@ $(document).ready(function() {
         { "orderable": false }
       ]
     });
-  }
-    
-  });
+  } 
+});
+
+$(document).ready(function() {
+  $('#dataframeSample').addClass("table table-bordered");
+  $('#dataframeSample').attr("width","100%");
+  $('#dataframeSample').attr("cellspacing","0");
+  $('#dataframeSample').DataTable();
+});
+
+$(document).ready(function() {
+  $('#dataframeDescription').addClass("table table-bordered");
+  $('#dataframeDescription').attr("width","100%");
+  $('#dataframeDescription').attr("cellspacing","0");
+  $('#dataframeDescription').DataTable();
+});
+
+$(document).ready(function() {
+  $('#dataframeInfo').addClass("table table-bordered");
+  $('#dataframeInfo').attr("width","100%");
+  $('#dataframeInfo').attr("cellspacing","0");
+  $('#dataframeInfo').DataTable();
+});
+
+
+$(document).ready(function() {
+  $('#correlations').addClass("table table-bordered");
+  $('#correlations').attr("width","100%");
+  $('#correlations').attr("cellspacing","0");
+  $('#correlations').DataTable(
+    { 
+      "columnDefs": [ { "orderable": false, "targets": 0 } ],
+      'rowCallback': function(row, data, index){
+        for(var index in row.cells){
+          var cellValue = row.cells[index].innerText;
+          if(!isNaN(cellValue)){
+            if(cellValue > 0){
+              //Rojo relacionadas
+              $(row.cells[index]).css('background-color', 'hsl(0, 100%, '+( Math.round(100 - (cellValue * 50 )) )+'%)');
+              //$(row.cells[index]).css('color', 'hsl(0, 100%, '+( Math.round(95 - (cellValue * 45)) )+'%)');
+            }else{
+              //Azul inversamente relacionadas
+              $(row.cells[index]).css('background-color', 'hsl(240, 100%, '+( Math.round(100 - (cellValue * -50)) )+'%)');
+              //$(row.cells[index]).css('color', 'hsl(240, 100%, '+( Math.round(95 - (cellValue * -45)) )+'%)');
+            }
+          }
+        }
+      }
+    }
+  );
+});
   
 /*
 
@@ -149,3 +206,18 @@ var myLineChart = new Chart(ctx, {
   }
 });
 */
+
+
+
+//*Show DatasetView**/
+
+$("#radioOverwriteFile").change(function() {
+  $("#newFileName").prop("disabled", true);
+  $("#newFileNameLabel").addClass("customDisable");
+});
+
+$("#radioNotOverwriteFile").change(function() {
+  $("#newFileName").prop("disabled", false);
+  $("#newFileNameLabel").removeClass("customDisable");
+});
+

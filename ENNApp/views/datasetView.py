@@ -44,7 +44,13 @@ def listDatasets(request):
         for file in os.listdir(dataSetsPath):
             filepath = os.path.join(dataSetsPath, file)
             if os.path.isfile(filepath):
-                datasets.append({"name": file, "userOwner": request.user.username , "creationDate": time.ctime(os.path.getctime(filepath)), "size": convert_size(os.path.getsize(filepath)), "url": ( downloadDataSetUrl + file), "deleteUrl": deleteDataSetUrl + file + "/"})
+                datasets.append({
+                    "name": file, 
+                    "userOwner": request.user.username , 
+                    "creationDate": time.ctime(os.path.getctime(filepath)), 
+                    "size": convert_size(os.path.getsize(filepath)), 
+                    "url": ( downloadDataSetUrl + file), 
+                    "deleteUrl": (deleteDataSetUrl + file + "/")})
         
         if request.user.is_superuser:
             baseDatasetPath = os.path.join(BASE_DIR, "userFiles")
@@ -56,7 +62,13 @@ def listDatasets(request):
                     for file in os.listdir(userDatasetPath):
                         filepath = os.path.join(userDatasetPath, file)
                         if os.path.isfile(filepath):
-                            datasets.append({"name": file, "userOwner": userDir , "creationDate": time.ctime(os.path.getctime(filepath)), "size": convert_size(os.path.getsize(filepath)), "url": ( downloadDataSetUrl + file), "deleteUrl": deleteDataSetUrl + file + "/"})
+                            datasets.append({
+                                "name": file, 
+                                "userOwner": userDir , 
+                                "creationDate": time.ctime(os.path.getctime(filepath)), 
+                                "size": convert_size(os.path.getsize(filepath)), 
+                                "url": ( downloadDataSetUrl + file), 
+                                "deleteUrl": (deleteDataSetUrl + file + "/")})
         
              
         context.update({'datasets': datasets})
@@ -94,9 +106,9 @@ def deleteDataset(request, userName, fileName):
 
 
 @login_required(login_url='/login/')
-def showDatasetSample(request, filename):
+def showDatasetSample(request, fileName):
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    dataSetsPath = os.path.join(BASE_DIR, "userFiles", request.user.username , "datasets", filename)
+    dataSetsPath = os.path.join(BASE_DIR, "userFiles", request.user.username , "datasets", fileName)
 
     context = {}
 
@@ -104,13 +116,16 @@ def showDatasetSample(request, filename):
         context.update({'secondaryMessageErr': "this file does not exist"})
     else:
        
-        getSamples(20,dataSetsPath)
-             
-        #context.update({'datasets': datasets})
+        try:
+            toRet = preprocessing.getSamples(dataSetsPath)
+            context.update(toRet)
+
+        except BaseException as e:
+            context.update({"messageErr": "An error occurred reading the file (" + str(e) +")"})
     
     loadContextMessages(request,context)
-    return HttpResponse("oks")
-    #return render(request, 'ENNApp/listDataset.html', context)
+    context.update({"datasetName": fileName})
+    return render(request, 'ENNApp/showDataset.html', context)
 
 
 def loadContextMessages(request,context):

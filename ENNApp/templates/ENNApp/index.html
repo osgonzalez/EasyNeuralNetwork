@@ -1,7 +1,7 @@
 {% extends './baseTemplate.html' %}
 
 {% block mainBlock %} 
-
+<!--
   <h1>Index view!!!!</h1>
   {% if user.is_authenticated %}
     <p>Hi {{ user.username }}</p>
@@ -9,6 +9,11 @@
     <p>You are not logged in</p>
     <a href="{% url 'login' %}">login</a>
   {% endif %}
+-->
+<!--Test-->
 
+{% load staticfiles %}
+<img src="{% static 'images/Logo.png' %}"  class="centerMax img-fluid" >
+<!--EndTest-->
 
 {% endblock %}

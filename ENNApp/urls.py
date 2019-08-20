@@ -18,6 +18,7 @@ urlpatterns = [
     path('uploadView/', datasetView.uploadView, name='uploadView'),
     path('addDataset/', datasetView.addDataset, name='addDataset'),
     path('listDatasets/', datasetView.listDatasets, name='listDatasets'),
+    path('showDatasetSample/<str:fileName>/', datasetView.showDatasetSample, name='showDatasetSample'),
     path('deleteDataset/<str:userName>/<str:fileName>/', datasetView.deleteDataset, name='deleteDataset'),
     path('listNeuralNetwork/', neuralNetworkView.listNeuralNetwork, name='listNeuralNetwork'),
     path('deleteNeuralNetwork/<str:userName>/<str:fileName>/', neuralNetworkView.deleteNeuralNetwork, name='deleteNeuralNetwork'),

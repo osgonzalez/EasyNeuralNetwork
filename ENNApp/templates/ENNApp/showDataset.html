@@ -1,0 +1,56 @@
+{% extends './baseTemplate.html' %}
+
+{% block mainBlock %}
+
+
+
+<!-- DataTable -->
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Dataset Preview </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            {% autoescape off %}
+            {{tablehtml}}
+            {% endautoescape %}
+        </div>
+        <br>
+        <button type="button" id="gotoUploadViewButtom" onclick="location.href='{% url 'uploadView' %}';"
+            class="btn btn-primary centerButtom">Add New neuralNetwork (TODO)</button>
+    </div>
+    <div class="card-footer small text-muted"></div>
+</div>
+
+
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Dataset Corelation </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            {% autoescape off %}
+            {{corr}}
+            {% endautoescape %}
+        </div>
+    </div>
+    <div class="card-footer small text-muted"></div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">
+        <i class="fas fa-table"></i>
+        Dataset Description </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            {% autoescape off %}
+            {{description}}
+            {% endautoescape %}
+        </div>
+    </div>
+    <div class="card-footer small text-muted"></div>
+</div>
+
+
+
+{% endblock %}

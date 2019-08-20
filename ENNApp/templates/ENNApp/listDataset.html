@@ -48,7 +48,7 @@
                             <form class="form-inline" >
                                 <div class="buttomGroup form-group">
                                     {% if dataset.userOwner == user.username %}
-                                    <i class="editbuttom fas fa-edit"></i>
+                                    <i onclick="location.href='/showDatasetSample/{{ dataset.name }}';" class="editbuttom fas fa-edit"></i>
                                     {% endif %}
                                     <i onclick="location.href='{{ dataset.url }}';" class="downloadbuttom fas fa-file-download"></i>
                                     <i class="deletebuttom far fa-trash-alt" data-toggle="modal" data-target="#DeleteMessageModal" data-url="{{ dataset.deleteUrl }}"></i>

@@ -2,15 +2,13 @@ import pandas as pd
 import pandas_profiling
 
 
-def getSamples(datasetPaht, numSamples=20):
+def getSamples(datasetPaht, numSamples=30):
     dataframe = pd.read_csv(datasetPaht, header=0)
     sample = dataframe.sample(n=numSamples) if dataframe.shape[1] >= numSamples else dataframe
     #sample = dataframe.sample(n=numMuestras).shape
     #dataframe.sample(n=numMuestras, random_state=1) Produce siempre los mismos resultados
 
-
     print("--------------------------------------")
-    print(dataframe.shape[1])
     #print(dataframe.info(verbose=True))
     print("--------------------------------------")
     print("--------------------------------------")

@@ -106,11 +106,12 @@ def deleteDataset(request, userName, fileName):
 
 
 @login_required(login_url='/login/')
-def showDatasetSample(request, fileName):
+def showDatasetSample(request, fileName, oldContext={}):
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     dataSetsPath = os.path.join(BASE_DIR, "userFiles", request.user.username , "datasets", fileName)
 
     context = {}
+    context.update(oldContext)
 
     if not os.path.exists(dataSetsPath):
         context.update({'secondaryMessageErr': "this file does not exist"})
@@ -135,3 +136,23 @@ def loadContextMessages(request,context):
     if 'messageOk' in request.session:
         context.update({"messageOk": request.session['messageOk']})
         del request.session['messageOk']
+    
+def preprocessDataset(request):
+    context = {}
+    if request.method == "POST" and request.POST['datasetName']:
+        try:
+            BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            dataSetsDir = os.path.join(BASE_DIR, "userFiles", request.user.username , "datasets")
+            if not os.path.exists(os.path.join(dataSetsDir,request.POST['datasetName'])):
+                request.session['messageErr'] = "The requested dataset does not exist"
+                return redirect('listDatasets')
+            else:
+                toRet = preprocessing.preprocessDataset(request.POST, dataSetsDir)
+                context.update(toRet)
+        except:
+            request.session['messageErr'] = "An error occurred preprocessing the DataSet"
+            return redirect('listDatasets')
+    
+    request.session['messageOk'] = "The preprocessing has been executed correctly"
+    return showDatasetSample( request=request, fileName=context['datasetName'], oldContext=context)
+

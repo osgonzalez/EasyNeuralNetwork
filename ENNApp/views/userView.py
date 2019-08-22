@@ -55,36 +55,8 @@ def testForm(request):
     }
     return render(request, 'ENNApp/index.html', context)
 '''
-#-------------------------------------------------------------------------------------------#
-'''
-@login_required(login_url='/login/')
-def uploadView(request):
-    return render(request, 'ENNApp/upload.html')
-
-@login_required(login_url='/login/')
-def addDataset(request):
-    if request.method == "POST" and request.FILES['dataSet']:
-        dataSetFile = request.FILES["dataSet"]
-        fileSystem = FileSystemStorage()
-        userName = request.user.username
-        filename = fileSystem.save( userName + "/datasets/" + dataSetFile.name, dataSetFile)
-        #print(dataSetFile.name)
-        #print(dataSetFile.size)
-    return HttpResponse("oks")
-'''
 
 
-'''
-if request.method == 'POST' and request.FILES['dataSet']:
-    dataSetFile = request.FILES["dataSet"]
-    fileSystem = FileSystemStorage()
-    filename = fileSystem.save(dataSetFile.name, dataSetFile)
-    uploaded_file_url = fileSystem.url(filename)
-    return render(request, 'core/simple_upload.html', {
-        'uploaded_file_url': uploaded_file_url
-    })
-return render(request, 'core/simple_upload.html')
-'''
 
 
 def loginUser(request):
@@ -125,17 +97,3 @@ def registerUser(request):
     else: 
         return render(request, 'register.html')
 
-'''
-@login_required(login_url='/login/')
-def listDatasets(request):
-    dataSetUrl = "/files/" + request.user.username + "/datasets/"
-
-    import os
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    dataSetsPath = os.path.join(BASE_DIR, str("userFiles/" +  request.user.username + "/datasets/"))
-    onlyfiles = [f for f in os.listdir(dataSetsPath) if os.path.isfile(os.path.join(dataSetsPath, f))]
-    
-    #return HttpResponse(str(onlyfiles))
-    return render(request, 'ENNApp/listDataset.html', {'loginError': True})
-    #return HttpResponse(' <a href="' + dataSetUrl + '">Login Page</a>')
-    '''

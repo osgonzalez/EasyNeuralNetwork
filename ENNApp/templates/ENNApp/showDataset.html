@@ -15,9 +15,7 @@
             {{tablehtml}}
             {% endautoescape %}
         </div>
-        <br>
-        <button type="button" id="gotoUploadViewButtom" onclick="location.href='{% url 'uploadView' %}';"
-            class="btn btn-primary centerButtom">Add New neuralNetwork (TODO)</button>
+        
     </div>
     <div class="card-footer small text-muted"></div>
 </div>
@@ -113,10 +111,12 @@
         </div>
         <div class="card-body">
                 <div class="stepForm">
-                        <form id="regForm" action="">
-                          
-                          <!--<h1>Register:</h1> -->
-                          <div class="tab">            
+                        <form id="regForm" action="{% url 'preprocessDataset' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="datasetName" value="{{datasetName}}">
+                            <!--<h1>Register:</h1> -->
+                            <!--Tab-->
+                            <div class="tabStep">            
                               <div class="form-group">
                                 <h4>Que deseas hacer?</h4>
                                 <div class="custom-control custom-radio">
@@ -128,50 +128,65 @@
                                     <label class="custom-control-label" for="radioNotOverwriteFile">Save as a different File</label>
                                 </div>
                                 <div class="form-group col-sm-12">
-                                    <label class="customDisable col-form-label col-form-label-sm" id="newFileNameLabel" for="inputSmall">New DatasetName</label>
-                                    <input class="form-control form-control-sm" type="text" value="{{datasetName}}" id="newFileName" disabled="">
+                                    <label class="customDisable col-form-label col-form-label-sm small" id="newFileNameLabel" for="inputSmall">New DatasetName</label>
+                                    <input class="form-control form-control-sm" type="text" value="{{datasetName}}" name="newFileName" id="newFileName" disabled="">
                                 </div>             
                             </div>
                           </div>
-                          <!--Tab-->
-                          <div class="tab">            
+                        <!--End Tab-->
+                        <!--Tab-->
+                          <div class="tabStep">            
                                 <div class="form-group">
                                     <h4>Que deseas hacer?</h4>
                                     <div class="custom-control custom-radio">
-                                        <input type="radio"  name="normalize" id="normalizeA" class="custom-control-input" value="Serialize" checked>
-                                        <label class="custom-control-label" for="normalizeA">Selialize</label>
+                                            <input type="radio"  name="normalize" id="normalizeC" class="custom-control-input" value="Scale" checked>
+                                            <label class="custom-control-label" for="normalizeC">Scale</label>
+                                            <div class="small text-muted">Transforms features by scaling each feature to the range [0,1]</div>
+                                        </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio"  name="normalize" id="normalizeA" class="custom-control-input" value="Standardize">
+                                        <label class="custom-control-label" for="normalizeA">Standardize</label>
+                                        <div class="small text-muted">Standardize features by removing the mean and scaling to unit variance</div>
+                                        <div class="small text-muted">The result is given by the formula: (&mu; = mean, &sigma; = std)</div>
+                                        <div class="small text-muted"> z<sub>n</sub> = (x<sub>n</sub> - X&mu;) / X&sigma; </div>
+                                        
                                     </div>
                                     <div class="custom-control custom-radio">
-                                        <input type="radio"  name="normalize" id="normalizeB" class="custom-control-input" value="Normalize">
-                                        <label class="custom-control-label" for="normalizeB">Normalize</label>
-                                    </div>
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" name="normalize" id="normalizeC" class="custom-control-input" value="None">
-                                        <label class="custom-control-label" for="normalizeC">None</label>
+                                        <input type="radio" name="normalize" id="normalizeB" class="custom-control-input" value="None">
+                                        <label class="custom-control-label" for="normalizeB">None</label>
                                     </div>                                            
                                 </div>
                             </div>
-                          <!--End Tab-->
+                        <!--End Tab-->
                         <!--Tab-->
-                        <div class="tab">            
+                        <div class="tabStep">            
                                 <div class="form-group">
-                                    <h4>Que deseas hacer con los nulos?</h4>
+                                    <h4>Replace missing values with:</h4>
                                     <div class="custom-control custom-radio">
-                                        <input type="radio"  name="valuesNull" id="valuesNullA" class="custom-control-input" value="" checked>
-                                        <label class="custom-control-label" for="valuesNullA">Numeros</label>
+                                        <input type="radio" name="valuesNull" id="valuesNullD" class="custom-control-input" value="custom" checked>
+                                        <label class="custom-control-label" for="valuesNullD">Custom Value</label>
+                                        <input class="form-control form-control-sm" style="width: 100px" type="number" value="0" name="customNumber" id="customNumber">                                     
+                                    </div> 
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio"  name="valuesNull" id="valuesNullA" class="custom-control-input" value="colMean">
+                                        <label class="custom-control-label" for="valuesNullA">Column Mean</label>
                                     </div>
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" name="valuesNull" id="valuesNullB" class="custom-control-input" value="None">
-                                        <label class="custom-control-label" for="valuesNullB">None</label>
-                                    </div>                                            
+                                        <input type="radio" name="valuesNull" id="valuesNullB" class="custom-control-input" value="colMedian">
+                                        <label class="custom-control-label" for="valuesNullB">Column Median</label>
+                                    </div> 
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" name="valuesNull" id="valuesNullC" class="custom-control-input" value="ColMode">
+                                        <label class="custom-control-label" for="valuesNullC">Column Mode</label>
+                                    </div>
                                 </div>
                             </div>
                             <!--End Tab-->
-                            <div class="tab">            
+                            <div class="tabStep">            
                                 <div class="form-group">
                                     <h4>Elije el target!</h4>
                                     <div class="form-group">
-                                        <select class="custom-select">
+                                        <select name="targetColl" class="custom-select">
                                             {% for coll in collNames %}
                                             <option value="{{coll}}" {% if forloop.last %} selected {% endif %}>{{coll}}</option>
                                             {% endfor %}

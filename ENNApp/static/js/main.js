@@ -221,3 +221,11 @@ $("#radioNotOverwriteFile").change(function() {
   $("#newFileNameLabel").removeClass("customDisable");
 });
 
+
+$("input[type=radio][name=valuesNull]").change(function() {
+  if($("#valuesNullD").prop( "checked")){
+    $("#customNumber").prop("disabled", false);
+  }else{
+    $("#customNumber").prop("disabled", true);
+  }
+});

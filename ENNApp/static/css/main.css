@@ -125,7 +125,7 @@ Step Form
 
 
   /* Hide all steps by default: */
-  .tab {
+  .tabStep {
     display: none;
   }
   /* Make circles that indicate the steps of the form: */

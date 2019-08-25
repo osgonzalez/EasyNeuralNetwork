@@ -118,6 +118,21 @@
     color: #d0d0d0;
 }
 
+.msjWarning{
+    font-size:20px;
+}
+
+.msjWarning i{
+    color:#ffA000;
+}
+
+.crossLine{
+    text-decoration:line-through;
+}
+
+#newFileName{
+    width: 400px;
+}
 
 /***
 Step Form

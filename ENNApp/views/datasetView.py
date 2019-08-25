@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 import os, time
 import math
 from ..common import preprocessing
+from datetime import datetime
 
 
 @login_required(login_url='/login/')
@@ -38,7 +39,7 @@ def listDatasets(request):
     context = {}
 
     if not os.path.exists(dataSetsPath):
-        context.update({'secondaryMessageErr': "You haven't any dataset yet"})
+        context.update({'secondaryMessageWarning': "You haven't any dataset yet"})
     else:
         datasets = []
         for file in os.listdir(dataSetsPath):
@@ -48,6 +49,7 @@ def listDatasets(request):
                     "name": file, 
                     "userOwner": request.user.username , 
                     "creationDate": time.ctime(os.path.getctime(filepath)), 
+                    #"creationDate": datetime.fromtimestamp(os.path.getctime(filepath)), 
                     "size": convert_size(os.path.getsize(filepath)), 
                     "url": ( downloadDataSetUrl + file), 
                     "deleteUrl": (deleteDataSetUrl + file + "/")})

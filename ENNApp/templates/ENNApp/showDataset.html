@@ -2,214 +2,243 @@
 
 {% block mainBlock %}
 
+<!--Tab Menu-->
+<ul class="nav nav-tabs">
+    <li class="nav-item col-sm ">
+      <a class="nav-link active text-center" data-toggle="tab" href="#DataSetSampleTab" style="">
+         <h5>Dataset Basic Info</h5>
+        </a>
+    </li>
+    <li class="nav-item col-sm">
+      <a class="nav-link text-center" data-toggle="tab" href="#prepQuestions" style="">
+        <h5>Prepocesado preguntas</h5>
+    </a>
+    </li>
+    <li class="nav-item col-sm">
+      <a class="nav-link text-center" data-toggle="tab" href="#pcaTab">
+            <h5>Principal Component Analysis</h5>
+        </a>
+    </li>
+  </ul>
+  <br>
+  <!--End Tab Menu-->
 
-
-<!-- DataTable -->
-<div class="card mb-3">
-    <div class="card-header">
-        <i class="fas fa-table"></i>
-        Dataset Preview </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            {% autoescape off %}
-            {{tablehtml}}
-            {% endautoescape %}
-        </div>
-        
-    </div>
-    <div class="card-footer small text-muted"></div>
-</div>
-
-
-<div class="card mb-3">
-    <div class="card-header">
-        <i class="fas fa-table"></i>
-        Dataset Corelation </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            {% autoescape off %}
-            {{corr}}
-            {% endautoescape %}
-        </div>
-    </div>
-    <div class="card-footer small text-muted"></div>
-</div>
-
-<div class="card mb-3">
-    <div class="card-header">
-        <i class="fas fa-table"></i>
-        Dataset Description </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            {% autoescape off %}
-            {{description}}
-            {% endautoescape %}
-        </div>
-    </div>
-    <div class="card-footer small text-muted"></div>
-</div>
-
-<!--Base Preprocessing Form--><!--
-<div>
-    <form action="">
-        <fieldset>
-            <legend>Custom forms</legend>
-            <div class="form-group">
-                <div class="custom-control custom-radio">
-                    <input type="radio" id="radioOverwriteFile" name="OverwriteFile" class="custom-control-input" value="True" checked>
-                    <label class="custom-control-label" for="radioOverwriteFile">Overwrite current file ("{{datasetName}}")</label>
+<div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade active show" id="DataSetSampleTab">
+        <!-- DataTable Basic info -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fas fa-table"></i>
+                Dataset Preview </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% autoescape off %}
+                    {{tablehtml}}
+                    {% endautoescape %}
                 </div>
-                <div class="custom-control custom-radio">
-                    <input type="radio" id="radioNotOverwriteFile" name="OverwriteFile" class="custom-control-input" value="False">
-                    <label class="custom-control-label" for="radioNotOverwriteFile">Save as a different File</label>
-                </div>
-                <div class="form-group col-sm-12">
-                    <label class="customDisable col-form-label col-form-label-sm" id="newFileNameLabel" for="inputSmall">New DatasetName</label>
-                    <input class="form-control form-control-sm" type="text" value="{{datasetName}}" id="newFileName" disabled="">
-                </div>             
+                
             </div>
-            <div class="form-group">
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck1" checked="">
-                <label class="custom-control-label" for="customCheck1">Check this custom checkbox</label>
-            </div>
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck2" disabled="">
-                <label class="custom-control-label" for="customCheck2">Disabled custom checkbox</label>
-            </div>
-            </div>
-            <div class="form-group">
-            <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="customSwitch1" checked="">
-                <label class="custom-control-label" for="customSwitch1">Toggle this switch element</label>
-            </div>
-            <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" disabled="" id="customSwitch2">
-                <label class="custom-control-label" for="customSwitch2">Disabled switch element</label>
-            </div>
-            </div>
-            <div class="form-group">
-            <select class="custom-select">
-                <option selected="">Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-            </select>
-            </div>
-        </fieldset>
-    </form>
-</div>
--->
-<!--END Base Preprocessing Form-->
-
-<!--Test-->
-
-<div class="card mb-3">
-        <div class="card-header">
-            <i class="fas fa-table"></i>
-            Dataset Preview 
+            <div class="card-footer small text-muted"></div>
         </div>
-        <div class="card-body">
-                <div class="stepForm">
-                        <form id="regForm" action="{% url 'preprocessDataset' %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="datasetName" value="{{datasetName}}">
-                            <!--<h1>Register:</h1> -->
-                            <!--Tab-->
-                            <div class="tabStep">            
-                              <div class="form-group">
-                                <h4>Que deseas hacer?</h4>
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" id="radioOverwriteFile" name="OverwriteFile" class="custom-control-input" value="True" checked>
-                                    <label class="custom-control-label" for="radioOverwriteFile">Overwrite current file ("{{datasetName}}")</label>
-                                </div>
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" id="radioNotOverwriteFile" name="OverwriteFile" class="custom-control-input" value="False">
-                                    <label class="custom-control-label" for="radioNotOverwriteFile">Save as a different File</label>
-                                </div>
-                                <div class="form-group col-sm-12">
-                                    <label class="customDisable col-form-label col-form-label-sm small" id="newFileNameLabel" for="inputSmall">New DatasetName</label>
-                                    <input class="form-control form-control-sm" type="text" value="{{datasetName}}" name="newFileName" id="newFileName" disabled="">
-                                </div>             
-                            </div>
-                          </div>
-                        <!--End Tab-->
-                        <!--Tab-->
-                          <div class="tabStep">            
-                                <div class="form-group">
-                                    <h4>Que deseas hacer?</h4>
-                                    <div class="custom-control custom-radio">
-                                            <input type="radio"  name="normalize" id="normalizeC" class="custom-control-input" value="Scale" checked>
-                                            <label class="custom-control-label" for="normalizeC">Scale</label>
-                                            <div class="small text-muted">Transforms features by scaling each feature to the range [0,1]</div>
-                                        </div>
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio"  name="normalize" id="normalizeA" class="custom-control-input" value="Standardize">
-                                        <label class="custom-control-label" for="normalizeA">Standardize</label>
-                                        <div class="small text-muted">Standardize features by removing the mean and scaling to unit variance</div>
-                                        <div class="small text-muted">The result is given by the formula: (&mu; = mean, &sigma; = std)</div>
-                                        <div class="small text-muted"> z<sub>n</sub> = (x<sub>n</sub> - X&mu;) / X&sigma; </div>
-                                        
-                                    </div>
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" name="normalize" id="normalizeB" class="custom-control-input" value="None">
-                                        <label class="custom-control-label" for="normalizeB">None</label>
-                                    </div>                                            
-                                </div>
-                            </div>
-                        <!--End Tab-->
-                        <!--Tab-->
-                        <div class="tabStep">            
-                                <div class="form-group">
-                                    <h4>Replace missing values with:</h4>
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" name="valuesNull" id="valuesNullD" class="custom-control-input" value="custom" checked>
-                                        <label class="custom-control-label" for="valuesNullD">Custom Value</label>
-                                        <input class="form-control form-control-sm" style="width: 100px" type="number" value="0" name="customNumber" id="customNumber">                                     
-                                    </div> 
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio"  name="valuesNull" id="valuesNullA" class="custom-control-input" value="colMean">
-                                        <label class="custom-control-label" for="valuesNullA">Column Mean</label>
-                                    </div>
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" name="valuesNull" id="valuesNullB" class="custom-control-input" value="colMedian">
-                                        <label class="custom-control-label" for="valuesNullB">Column Median</label>
-                                    </div> 
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" name="valuesNull" id="valuesNullC" class="custom-control-input" value="ColMode">
-                                        <label class="custom-control-label" for="valuesNullC">Column Mode</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--End Tab-->
-                            <div class="tabStep">            
-                                <div class="form-group">
-                                    <h4>Elije el target!</h4>
+
+
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fas fa-table"></i>
+                Dataset Corelation </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% autoescape off %}
+                    {{corr}}
+                    {% endautoescape %}
+                </div>
+            </div>
+            <div class="card-footer small text-muted"></div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fas fa-table"></i>
+                Dataset Description </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% autoescape off %}
+                    {{description}}
+                    {% endautoescape %}
+                </div>
+            </div>
+            <div class="card-footer small text-muted"></div>
+        </div>
+<!--End Basic Info-->
+    </div>
+
+
+    <div class="tab-pane fade" id="prepQuestions">
+    <!--Preprocesing Questions-->
+
+        <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-table"></i>
+                    preguntas de preprocesado 
+                </div>
+                <div class="card-body">
+                        <div class="stepForm">
+                                <form id="regForm" action="{% url 'preprocessDataset' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="datasetName" value="{{datasetName}}">
+                                    <!--<h1>Register:</h1> -->
+                                    <!--Tab-->
+                                    <div class="tabStep">            
                                     <div class="form-group">
-                                        <select name="targetColl" class="custom-select">
-                                            {% for coll in collNames %}
-                                            <option value="{{coll}}" {% if forloop.last %} selected {% endif %}>{{coll}}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>                                      
+                                        <h4>Que deseas hacer?</h4>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="radioOverwriteFile" name="OverwriteFile" class="custom-control-input" value="True" checked>
+                                            <label class="custom-control-label" for="radioOverwriteFile">Overwrite current file ("{{datasetName}}")</label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="radioNotOverwriteFile" name="OverwriteFile" class="custom-control-input" value="False">
+                                            <label class="custom-control-label" for="radioNotOverwriteFile">Save as a different File</label>
+                                        </div>
+                                        <div class="form-group col-sm-12">
+                                            <label class="customDisable col-form-label col-form-label-sm small" id="newFileNameLabel" for="inputSmall">New DatasetName</label>
+                                            <input class="form-control form-control-sm" type="text" value="{{datasetName}}" name="newFileName" id="newFileName" disabled="">
+                                        </div>             
+                                    </div>
                                 </div>
+                                <!--End Tab-->
+                                <!--Tab-->
+                                <div class="tabStep">            
+                                    <div class="form-group">
+                                        <h4>Desea eleimnar alguna columna?</h4>
+                                        {% for coll in collNames %}
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="deleteColsCheck custom-control-input" id="deleteCol{{ forloop.counter }}" name='deleteCols[]' value="{{coll}}">
+                                                <label class="custom-control-label" for="deleteCol{{ forloop.counter }}">{{coll}}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <!--End Tab-->
+                                <!--Tab-->
+                                <div class="tabStep">            
+                                        <div class="form-group">
+                                            <h4>Que deseas hacer?</h4>
+                                            <div class="custom-control custom-radio">
+                                                    <input type="radio"  name="normalize" id="normalizeC" class="custom-control-input" value="Scale" checked>
+                                                    <label class="custom-control-label" for="normalizeC">Scale</label>
+                                                    <div class="small text-muted">Transforms features by scaling each feature to the range [0,1]</div>
+                                                    <div class="small text-muted">The result is given by the formula: </div>
+                                                    <div class="small text-muted"> z<sub>n</sub> = (x<sub>n</sub> - X<sub>min</sub>) / (X<sub>max   </sub> - X<sub>min</sub>) </div>
+                                                </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio"  name="normalize" id="normalizeA" class="custom-control-input" value="Standardize">
+                                                <label class="custom-control-label" for="normalizeA">Standardize</label>
+                                                <div class="small text-muted">Standardize features by removing the mean and scaling to unit variance</div>
+                                                <div class="small text-muted">The result is given by the formula: (&mu; = mean, &sigma; = std)</div>
+                                                <div class="small text-muted"> z<sub>n</sub> = (x<sub>n</sub> - X&mu;) / X&sigma; </div>
+                                                
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" name="normalize" id="normalizeB" class="custom-control-input" value="None">
+                                                <label class="custom-control-label" for="normalizeB">None</label>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                <!--End Tab-->
+                                <!--Tab-->
+                                <div class="tabStep">            
+                                    <div class="form-group">
+                                        <h4>En que columnas categoricas queires realizar One-hot encoding (Esto es usado para datos categoricos)</h4>
+                                        {% for coll in collNames %}
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input {% if coll in categoricCols %} categoric {% endif %}" id="oneHot{{coll}}" name='oneHotList[]' value="{{coll}}" {% if coll in categoricCols%} checked disabled {% endif %}>
+                                                <label class="custom-control-label" for="oneHot{{coll}}" id="oneHotLabel{{coll}}">{{coll}}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <!--End Tab-->
+                                <!--Tab-->
+                                <div class="tabStep">            
+                                        <div class="form-group">
+                                            <h4>Replace missing values with:</h4>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" name="valuesNull" id="valuesNullD" class="custom-control-input" value="custom" checked>
+                                                <label class="custom-control-label" for="valuesNullD">Custom Value</label>
+                                                <input class="form-control form-control-sm" style="width: 100px" type="number" value="0" name="customNumber" id="customNumber">                                     
+                                            </div> 
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio"  name="valuesNull" id="valuesNullA" class="custom-control-input" value="colMean">
+                                                <label class="custom-control-label" for="valuesNullA">Column Mean</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" name="valuesNull" id="valuesNullB" class="custom-control-input" value="colMedian">
+                                                <label class="custom-control-label" for="valuesNullB">Column Median</label>
+                                            </div> 
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" name="valuesNull" id="valuesNullC" class="custom-control-input" value="ColMode">
+                                                <label class="custom-control-label" for="valuesNullC">Column Mode</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--End Tab-->
+                                <div class="divStepButtons">
+                                    <button type="button" class="btn btn-primary" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                                    <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                                </div>
+                                <!-- Circles which indicates the steps of the form: -->
+                                <div class="stepCircleIndicator">
+                                    <span class="step"></span>
+                                    <span class="step"></span>
+                                    <span class="step"></span>
+                                    <span class="step"></span>
+                                    <span class="step"></span>
+                                </div>
+                                </form>
                             </div>
-                            <!--End Tab-->
-                          <div class="divStepButtons">
-                            <button type="button" class="btn btn-primary" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-                            <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)">Next</button>
-                          </div>
-                          <!-- Circles which indicates the steps of the form: -->
-                          <div class="stepCircleIndicator">
-                            <span class="step"></span>
-                            <span class="step"></span>
-                            <span class="step"></span>
-                            <span class="step"></span>
-                          </div>
-                        </form>
-                      </div>
+                </div>
+            <div class="card-footer small text-muted"></div>
         </div>
-    <div class="card-footer small text-muted"></div>
+
+    <!--End Questions-->
+    </div>
+
+    <div class="tab-pane fade" id="pcaTab">
+        <!--PCA-->
+        <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-table"></i>
+                    preguntas de preprocesado 
+                </div>
+                <div class="card-body">
+                    <form id="regForm" action="{% url 'preprocessDataset' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="datasetName" value="{{datasetName}}">
+                        <!--<h1>Register:</h1> -->
+                        
+                        <!--Tab-->         
+                        <div class="form-group">
+                            <h4>Elije el target!</h4>
+                            <div class="form-group">
+                                {% for coll in collNames %}
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="targetColl{{ forloop.counter }}" name='targetColls[]' value="{{coll}}">
+                                    <label class="custom-control-label" for="targetColl{{ forloop.counter }}">{{coll}}</label>
+                                </div>
+                                {% endfor %}
+                            </div>                                      
+                        </div>
+                        <!--End Tab-->
+                        <div>
+                            <button type="submit" class="btn btn-success" >Submit</button>
+                        </div>
+                    </form>
+                </div>
+            <div class="card-footer small text-muted"></div>
+        </div>
+        <!--End PCA-->
+    </div>
+
 </div>
 
 

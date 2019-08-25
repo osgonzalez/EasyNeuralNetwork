@@ -110,7 +110,10 @@ $(document).ready(function() {
   $('#dataframeDescription').addClass("table table-bordered");
   $('#dataframeDescription').attr("width","100%");
   $('#dataframeDescription').attr("cellspacing","0");
-  $('#dataframeDescription').DataTable();
+  $('#dataframeDescription').DataTable({
+    //"pageLength": 50
+    "paging": false
+  });
 });
 
 $(document).ready(function() {
@@ -227,5 +230,23 @@ $("input[type=radio][name=valuesNull]").change(function() {
     $("#customNumber").prop("disabled", false);
   }else{
     $("#customNumber").prop("disabled", true);
+  }
+});
+
+$("input[type=checkbox][name='deleteCols[]']").change(function() {
+  var colum = $(this).val();
+  var oneHotCheckBox = $("#oneHot"+colum);
+  if(!oneHotCheckBox.hasClass("categoric")){
+    if($(this).prop( "checked")){
+      oneHotCheckBox.prop("disabled", true);
+      oneHotCheckBox.prop("checked", false);
+    }else{
+      oneHotCheckBox.prop("disabled", false);
+    }
+  }
+  if($(this).prop( "checked")){
+    $("#oneHotLabel"+colum).addClass("crossLine");
+  }else{
+    $("#oneHotLabel"+colum).removeClass("crossLine");
   }
 });

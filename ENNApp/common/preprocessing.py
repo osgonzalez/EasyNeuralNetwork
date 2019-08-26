@@ -3,6 +3,8 @@ import os
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 import numpy as np
 import sys
+from sklearn.decomposition import PCA
+
 
 
 def getSamples(datasetPaht, numSamples=30):
@@ -102,50 +104,43 @@ def preprocessDataset(parameters, datasetDir):
 
 
 
-def principalComponentAnalysis(parameters, datasetPath):
+def principalComponentAnalysis(parameters, datasetDir):
     
+    datasetPath = os.path.join(datasetDir,parameters['datasetName']) 
+
     dataframe = readDataset(datasetPath)
 
     # Select Target
 
-    '''
-    cols = dataframe.columns.tolist()
-    if not cols[-1:][0] == parameters["targetColl"]:
-        newIndex = []
-        
-        for col in cols:
-            if not col == parameters["targetColl"]:
-                newIndex.append(col)
-        
-        newIndex.append(parameters["targetColl"])
-        dataframe = dataframe[newIndex]
-    '''
     targetCols = parameters.getlist('targetColls[]')
     cols = dataframe.columns.tolist()
-    X = dataframe[cols]
+    dataCols = list(set(cols) - set(targetCols))
+
+    X = StandardScaler().fit_transform(dataframe[dataCols])
     Y = dataframe[targetCols]
 
-    npCovarianceMatrix = np.cov(X.T)
+    if parameters["pcaAcuracy"] == "pcaAcuracy" :
+        pcaAcuracyNumber = float(parameters["pcaAcuracyNumber"])/100
+        pca = PCA(n_components=pcaAcuracyNumber)
+    else:
+        pcaDimNumber = int(parameters["pcaDimNumber"])
+        pca = PCA(n_components=pcaDimNumber )
 
-    eig_vals, eig_vecs = np.linalg.eig(npCovarianceMatrix)
-
+    principalComponents = pca.fit_transform(X)
+    colNames = []
+    for i in range(pca.n_components_ ):
+        colNames.append("Component_"+ str(i))
+    principalDf = pd.DataFrame(data = principalComponents, columns = colNames)
     
-    #  Hacemos una lista de parejas (autovector, autovalor) 
-    eig_pairs = [(np.abs(eig_vals[i]), eig_vecs[:,i]) for i in range(len(eig_vals))]
-
-    # Ordenamos estas parejas den orden descendiente con la función sort
-    eig_pairs.sort(key=lambda x: x[0], reverse=True)
-
-    # Visualizamos la lista de autovalores en orden desdenciente
-    print('Autovalores en orden descendiente:')
-    for i in eig_pairs:
-        print(i[0])
+    dataframe = pd.concat([principalDf, Y], axis = 1)
 
 
     writeDataset(dataframe,datasetPath)
 
     toRet = {
-        "test": "sample"
+        "test": "sample",
+        "datasetName": parameters['datasetName'],
+        "variance_ratio": ((pca.explained_variance_ratio_.sum())*100)
     }
     return toRet
 
@@ -154,17 +149,3 @@ def principalComponentAnalysis(parameters, datasetPath):
 
 
 
-'''
-#cols = dataframe.columns.tolist()
-#newDataframeCols = pd.DataFrame()
-for oneHotCol in oneHotList:
-    try:
-        #newDataframeCols = pd.get_dummies(dataframe,prefix=oneHotCol) + newDataframeCols
-        dataframe = pd.get_dummies(dataframe,prefix=oneHotCol)
-    except ValueError as e:
-        print("\n--------- Error ---------\n",e,"\n--------- End ---------\n")
-        #pass
-#cols = list(set(cols) - set(oneHotList))
-#dataframe = dataframe[cols] + newDataframeCols
-#dataframe = dataframe[cols]
-'''

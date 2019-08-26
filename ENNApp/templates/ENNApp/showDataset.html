@@ -208,15 +208,16 @@
         <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    preguntas de preprocesado 
+                    Principal Component Analysis Process 
                 </div>
                 <div class="card-body">
-                    <form id="regForm" action="{% url 'preprocessDataset' %}" method="post">
+                    <form id="regForm" action="{% url 'principalComponentAnalysis' %}" method="post">
                         {% csrf_token %}
                         <input type="hidden" name="datasetName" value="{{datasetName}}">
                         <!--<h1>Register:</h1> -->
-                        
-                        <!--Tab-->         
+                        <div class="small text-muted">*To execute this process, there should be no categorical columns, or null values, if it exists, please execute the preprocessing section.</div>                                                        
+                        <br>
+                        <!--Tab-->
                         <div class="form-group">
                             <h4>Elije el target!</h4>
                             <div class="form-group">
@@ -226,11 +227,24 @@
                                     <label class="custom-control-label" for="targetColl{{ forloop.counter }}">{{coll}}</label>
                                 </div>
                                 {% endfor %}
+                                <br>
+                                <h6>Seleciona opcion PCA:</h6>
+                                <div class="custom-control custom-radio">
+                                        <input type="radio" name="pcaAcuracy" id="pcaPercent" class="custom-control-input" value="pcaAcuracy" checked>
+                                        <label class="custom-control-label" for="pcaPercent">Select automatically the number of components such that the amount of variance that needs to be explained is greater than the percentage specified</label>
+                                        <input class="form-control form-control-sm" style="width: 100px" min="2" max="99" type="number" value="95" name="pcaAcuracyNumber" id="pcaAcuracyNumber">                                     
+                                </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" name="pcaAcuracy" id="pcaDim" class="custom-control-input" value="pcaDim">
+                                        <label class="custom-control-label" for="pcaDim">Select a constant number of components</label>
+                                        <input class="form-control form-control-sm" style="width: 100px" min="2" type="number" value="2" name="pcaDimNumber" id="pcaDimNumber">                                     
+                                    </div>
+                                    
                             </div>                                      
                         </div>
                         <!--End Tab-->
                         <div>
-                            <button type="submit" class="btn btn-success" >Submit</button>
+                            <button type="submit" class="btn btn-success" id="runPCAButtom">Run PCA</button>
                         </div>
                     </form>
                 </div>

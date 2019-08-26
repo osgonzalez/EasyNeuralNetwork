@@ -151,10 +151,32 @@ def preprocessDataset(request):
             else:
                 toRet = preprocessing.preprocessDataset(request.POST, dataSetsDir)
                 context.update(toRet)
+                request.session['messageOk'] = "The preprocessing has been executed correctly"
         except:
             request.session['messageErr'] = "An error occurred preprocessing the DataSet"
             return redirect('listDatasets')
     
-    request.session['messageOk'] = "The preprocessing has been executed correctly"
     return showDatasetSample( request=request, fileName=context['datasetName'], oldContext=context)
 
+
+
+
+def principalComponentAnalysis(request):
+    context = {}
+    if request.method == "POST" and request.POST['datasetName']:
+        try:
+            BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            dataSetsDir = os.path.join(BASE_DIR, "userFiles", request.user.username , "datasets")
+            if not os.path.exists(os.path.join(dataSetsDir,request.POST['datasetName'])):
+                request.session['messageErr'] = "The requested dataset does not exist"
+                return redirect('listDatasets')
+            else:
+                toRet = preprocessing.principalComponentAnalysis(request.POST, dataSetsDir)
+                context.update(toRet)
+                request.session['messageOk'] = "The principal Component Analysis has been executed correctly whith a variance ratio of " + str(context["variance_ratio"]) + "%"
+        except Exception as e:
+            print(str(e))
+            request.session['messageErr'] = "An error occurred while executing the principal Component Analysis of the DataSet"
+            return redirect('listDatasets')
+    
+    return showDatasetSample( request=request, fileName=context['datasetName'], oldContext=context)

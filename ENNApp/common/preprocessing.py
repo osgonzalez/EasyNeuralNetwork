@@ -4,8 +4,13 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 import numpy as np
 import sys
 from sklearn.decomposition import PCA
-
-
+from sklearn.model_selection import train_test_split
+# tensorflow
+import tensorflow
+# keras
+import keras
+from keras.models import Sequential
+from keras.layers.core import Dense
 
 def getSamples(datasetPaht, numSamples=30):
     dataframe = readDataset(datasetPaht)
@@ -146,6 +151,77 @@ def principalComponentAnalysis(parameters, datasetDir):
 
 
 
+def getColsNames(datasetPaht):
+    dataframe = readDataset(datasetPaht)
+
+    toRet = {
+        "collNames": dataframe.columns.tolist()
+    }
+    return toRet
+
+def executeModel(models, rowData, datasetPath):
+
+    toRet = {}
+    dataframe = readDataset(datasetPath)
+
+    X = dataframe[rowData["dataNames"]].values
+    Y = dataframe[rowData["targetsNames"]].values
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.33, random_state=42)
+
+    
+    for modelName in models:
+        try:
+            
+            #Clear Sesion
+            keras.backend.clear_session()
+
+            #Create the secuential model
+            model = Sequential()
+
+            #Imput Layer
+            dimNumber = int(models[modelName]["firstDimNumber"])
+            activation = str(models[modelName]["firstActivation"])
+            model.add(Dense(dimNumber, activation=activation,input_dim=dimNumber))
+            
+            #Hidden Layers
+            for hidenLayer in models[modelName]["hidenLayers"]:
+                dimNumber = int(models[modelName]["hidenLayers"][hidenLayer]["dimNumber"])
+                activation = str(models[modelName]["hidenLayers"][hidenLayer]["activation"])
+                model.add(Dense(dimNumber, activation=activation))
+            
+            #Output Layer
+            dimNumber = int(models[modelName]["lastDimNumber"])
+            activation = str(models[modelName]["lastActivation"])
+            model.add(Dense(dimNumber, activation=activation))
+
+            #Compile the model
+            lossFuntion = str(models[modelName]["lossFuntion"])
+            optimicer = str(models[modelName]["optimicer"])
+            model.compile(loss=lossFuntion, optimizer=optimicer)
+
+
+            #Fit the model whith the train data (and indicate the numer of iterations for the data)
+            epochs = int(models[modelName]["epochs"])
+            model.fit(X_train, y_train, epochs=epochs)
+            
+            #Model summary
+            print(model.summary())
 
 
 
+
+        except BaseException as e:
+            print("Error -> " + str(e))
+            if toRet["messageErr"] is not None:
+                toRet.update({"messageErr": "An error occurred in Model " + modelName})
+            else:
+                toRet.update({"messageErr": toRet["messageErr"] + ", " + modelName})
+    
+    '''
+    for coche in data:
+    print(coche)
+    print(data[coche]["marca"])
+    print(data[coche]["modelo"])
+    for tono in data[coche]["color"]:
+        print(data[coche]["color"][tono])
+    '''

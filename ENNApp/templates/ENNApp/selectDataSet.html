@@ -1,0 +1,57 @@
+{% extends './baseTemplate.html' %}
+
+{% block mainBlock %}
+
+
+
+<!-- DataTable -->
+<div class="card mb-3">
+    <div class="card-header">
+        
+        <h5> <i class="fas fa-table"></i> Please, select a Dataset to train the models</h5>    
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered selectDatasetTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Creation Date</th>
+                        <th>Size</th>
+                        <th></th>
+
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Creation Date</th>
+                        <th>Size</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% for dataset in datasets %}
+                    <tr>
+                        <td>{{ dataset.name }}</td>
+                        <td>{{ dataset.creationDate }}</td>
+                        <td>{{ dataset.size }}</td>
+                        <td>
+                            <div class="buttomGroup form-group createModelbuttom">
+                                <i onclick="location.href='/createModel/{{ dataset.name }}';"
+                                    class=" fas fa-cogs"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br>
+    </div>
+    <div class="card-footer small text-muted"></div>
+
+</div>
+
+
+{% endblock %}

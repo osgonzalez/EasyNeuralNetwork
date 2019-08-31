@@ -68,11 +68,11 @@
         <li class="nav-item {% if request.get_full_path == "/listDatasets/" or request.get_full_path == "/uploadView/" %} active {% endif %}">
           <a class="nav-link" href="{% url 'listDatasets' %}">
             <i class="fas fa-fw fa-table"></i>
-            <span>DataSets</span></a>
+            <span>Datasets</span></a>
         </li>
         <li class="nav-item {% if request.get_full_path == "/listNeuralNetwork/" %} active {% endif %}">
           <a class="nav-link" href="{% url 'listNeuralNetwork' %}">
-            <i class="fas fa-fw fa-table"></i>
+            <i class="fas fa-project-diagram"></i>
             <span>Neural Network</span></a>
         </li>
         <!--Custom-->

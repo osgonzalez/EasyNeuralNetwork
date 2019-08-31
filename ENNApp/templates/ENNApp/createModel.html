@@ -1,0 +1,271 @@
+{% extends './baseTemplate.html' %}
+
+{% block mainBlock %}
+
+<!--Load executeModel Url-->
+<script type="text/javascript">
+    // using jQuery
+    var executeModelUrl = "{% url 'executeModel' %}";
+    var datasetName = "{{datasetName}}";
+
+</script>
+<!--End executeModel Url-->
+
+<div class="form-group selectTargetModelView">
+    <h4>Elije el target!</h4>
+    <div class="form-group">
+        {% for coll in collNames %}
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="targetColl{{ forloop.counter }}"
+                name='targetsToModel[]' value="{{coll}}">
+            <label class="custom-control-label" for="targetColl{{ forloop.counter }}">{{coll}}</label>
+        </div>
+        {% endfor %}
+        <br>
+        <div>
+            <button type="submit" class="btn btn-success" id="selectTargetButtom">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!--Main Model Cration-->
+<!--<div id="mainModelCreation" class="tabStep">-->
+<div id="mainModelCreation" class="tabStep">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="" id="modelsDiv">
+                    <h4 class="centerDiv">Models to execute</h4>
+                    <!--Models List-->
+                </div>
+                <div class="centerDiv">
+                    <button class="btn btn-success" id="executeModelButtom" onclick="executeModels();">execute</button>
+                </div>
+            </div>
+
+            <!--<div class="col-sm-1"></div>-->
+            <div class="col-sm-8" id="modelsFormDiv">
+                <div id="msjErrorName" class="alert alert-dismissible alert-danger" style="display: none;">
+                    <i class="fa fa-times-circle"></i>
+                    <strong>Error! </strong> <span id="msjErrorNameText"></span>
+                </div>
+                <!--Model Form-->
+                <form>
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="modelName">Model Name</label>
+                            <input type="text" class="form-control" id="modelName" placeholder="Model Name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-2 mb-3">
+                            <label>Dimensiones</label>
+                            <input class="form-control form-control" type="number" value="1" min="1"
+                                name="firstDimNumber" id="firstDimNumber" readonly>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Activation Funtion</label>
+                            <select class="form-control" name="firstActivationFuntion" id="firstActivationFuntion">
+                                <option value="softmax">Softmax</option>
+                                <option value="elu">Exponential Linear Unit (Elu)</option>
+                                <option value="selu">Scaled Exponential Linear Unit (Selu)</option>
+                                <option value="softplus">Softplus</option>
+                                <option value="softsign">Softsign</option>
+                                <option value="relu">Rectified Linear Unit (Relu)</option>
+                                <option value="tanh">Hyperbolic Tangent Activation Function (Tanh)</option>
+                                <option value="sigmoid">Sigmoid</option>
+                                <option value="hard_sigmoid">Hard Sigmoid</option>
+                                <option value="exponential">Exponential (Base e)</option>
+                                <option value="linear">Linear (Identity)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id=layerContainer>
+                        <!--Layers-->
+
+                        <!--End Layers-->
+                    </div>
+                    <button class="btn btn-primary btn-sm addLayerButtom" type="button" onclick="addLayerRow();">Add
+                        hidden
+                        layer</button>
+                    <div class="form-row">
+                        <div class="col-md-2 mb-3">
+                            <label>Dimensiones</label>
+                            <input class="form-control form-control" type="number" value="1" min="1"
+                                name="lastDimNumber" id="lastDimNumber" readonly>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Activation Funtion</label>
+                            <select class="form-control" name="lastActivationFuntion" id="lastActivationFuntion">
+                                <option value="softmax">Softmax</option>
+                                <option value="elu">Exponential Linear Unit (Elu)</option>
+                                <option value="selu">Scaled Exponential Linear Unit (Selu)</option>
+                                <option value="softplus">Softplus</option>
+                                <option value="softsign">Softsign</option>
+                                <option value="relu">Rectified Linear Unit (Relu)</option>
+                                <option value="tanh">Hyperbolic Tangent Activation Function (Tanh)</option>
+                                <option value="sigmoid" selected>Sigmoid</option>
+                                <option value="hard_sigmoid">Hard Sigmoid</option>
+                                <option value="exponential">Exponential (Base e)</option>
+                                <option value="linear">Linear (Identity)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <!--Loss function-->
+                        <div class="form-group">
+                            <h4>Select the Loss Function</h4>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="lossFuntion" id="optimicermean_squared_error"
+                                    class="custom-control-input" value="mean_squared_error" checked>
+                                <label class="custom-control-label" for="optimicermean_squared_error">Mean Squared
+                                    Error</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="lossFuntion" id="optimicermean_absolute_error"
+                                    class="custom-control-input" value="mean_absolute_error">
+                                <label class="custom-control-label" for="optimicermean_absolute_error">Mean Absolute
+                                    Error</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="lossFuntion" id="optimicermean_absolute_percentage_error"
+                                    class="custom-control-input" value="mean_absolute_percentage_error">
+                                <label class="custom-control-label" for="optimicermean_absolute_percentage_error">Mean
+                                    Absolute Percentage Error</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="lossFuntion" id="optimicermean_squared_logarithmic_error"
+                                    class="custom-control-input" value="mean_squared_logarithmic_error">
+                                <label class="custom-control-label" for="optimicermean_squared_logarithmic_error">Mean
+                                    Squared Logarithmic Error</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="lossFuntion" id="optimicersquared_hinge"
+                                    class="custom-control-input" value="squared_hinge">
+                                <label class="custom-control-label" for="optimicersquared_hinge">Squared Hinge</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="lossFuntion" id="optimicerhinge" class="custom-control-input"
+                                    value="hinge">
+                                <label class="custom-control-label" for="optimicerhinge">Hinge</label>
+                            </div>
+
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="lossFuntion" id="optimicerlogcosh"
+                                    class="custom-control-input" value="logcosh">
+                                <label class="custom-control-label" for="optimicerlogcosh">Logarithm of the hyperbolic
+                                    cosine </label>
+                            </div>
+                            <label style="margin-left: 24px;">of the prediction error (Logcosh)</label>
+                        </div>
+                        <div class="form-group" style="margin-top: 40px; margin-left: 20px;">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="lossFuntion" id="optimicercategorical_hinge"
+                                    class="custom-control-input" value="categorical_hinge">
+                                <label class="custom-control-label" for="optimicercategorical_hinge">Categorical
+                                    Hinge</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="lossFuntion" id="optimicercategorical_crossentropy"
+                                    class="custom-control-input" value="categorical_crossentropy">
+                                <label class="custom-control-label" for="optimicercategorical_crossentropy">Categorical
+                                    Crossentropy</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="lossFuntion" id="optimicersparse_categorical_crossentropy"
+                                    class="custom-control-input" value="sparse_categorical_crossentropy">
+                                <label class="custom-control-label"
+                                    for="optimicersparse_categorical_crossentropy">Sparse Categorical
+                                    Crossentropy</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="lossFuntion" id="optimicerbinary_crossentropy"
+                                    class="custom-control-input" value="binary_crossentropy">
+                                <label class="custom-control-label" for="optimicerbinary_crossentropy">Binary
+                                    Crossentropy</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="lossFuntion" id="optimicerkullback_leibler_divergence"
+                                    class="custom-control-input" value="kullback_leibler_divergence">
+                                <label class="custom-control-label" for="optimicerkullback_leibler_divergence">Kullback
+                                    Leibler Divergence</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="lossFuntion" id="optimicerpoisson"
+                                    class="custom-control-input" value="poisson">
+                                <label class="custom-control-label" for="optimicerpoisson">Poisson</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="lossFuntion" id="optimicercosine_proximity"
+                                    class="custom-control-input" value="cosine_proximity">
+                                <label class="custom-control-label" for="optimicercosine_proximity">Cosine
+                                    Proximity</label>
+                            </div>
+                        </div>
+                        <!--End Loss Funtion-->
+                        <!--Opcimicers-->
+                        <div class="form-group">
+                            <h4>Select the Optimicer:</h4>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="optimicer" id="losssgd" class="custom-control-input"
+                                    value="sgd" checked>
+                                <label class="custom-control-label" for="losssgd">Stochastic Gradient Descent
+                                    (SGD)</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="optimicer" id="lossrmsprop" class="custom-control-input"
+                                    value="rmsprop">
+                                <label class="custom-control-label" for="lossrmsprop">RMSProp</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="optimicer" id="lossadagrad" class="custom-control-input"
+                                    value="adagrad">
+                                <label class="custom-control-label" for="lossadagrad">Adagrad</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="optimicer" id="lossadadelta" class="custom-control-input"
+                                    value="adadelta">
+                                <label class="custom-control-label" for="lossadadelta">Adadelta</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="optimicer" id="lossadam" class="custom-control-input"
+                                    value="adam">
+                                <label class="custom-control-label" for="lossadam">Adam</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="optimicer" id="lossadamax" class="custom-control-input"
+                                    value="adamax">
+                                <label class="custom-control-label" for="lossadamax">Adamax</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" name="optimicer" id="lossnadam" class="custom-control-input"
+                                    value="nadam">
+                                <label class="custom-control-label" for="lossnadam">Nesterov Adam (Nadam)</label>
+                            </div>
+                        </div>
+                        <!--End Optimicers-->
+                    </div>
+                    <!--Epoch and batch size-->
+                    <div class="form-row">
+                        <div class="col-md-3 mb-3">
+                            <h4>Epochs</h4>
+                            <input class="form-control form-control" type="number" value="10" min="1" name="epochs"
+                                id="epochs">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <h4>Batch Size</h4>
+                            <input class="form-control form-control" type="number" value="32" min="1" name="batchSize"
+                                id="batchSize">
+                        </div>
+                    </div>
+                    <!--End Epochs and batch size-->
+                    <button class="btn btn-primary" onclick="saveModel();" type="button">Add Model</button>
+                </form>
+                <!--End Model Form-->
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+{% endblock %}

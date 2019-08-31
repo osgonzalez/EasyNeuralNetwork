@@ -46,6 +46,33 @@
     text-align:center;
 }
 
+#executeModelButtom{
+    display: none;
+    text-align: center;
+    margin: 16px;
+}
+
+.redColor{
+    color: #ff0000;
+}
+
+.deleteLayerButtom{
+    margin-top: 33px;
+}
+
+.addLayerButtom{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#msjErrorName{
+    width: 530px;
+}
+
+#msjErrorName i,strong{
+    font-size: 18px;
+}
+
 .centerMax {
     display: block;
     margin-left: auto;
@@ -139,6 +166,27 @@
     margin-top: 10px;
 }
 
+#runPCAButtom{
+    margin-left: 30px;
+    margin-top: 10px;
+}
+
+#selectTargetButtom{
+    margin-left: 30px;
+    margin-top: 10px;
+}
+
+
+.createModelbuttom{
+    color: #1c17a0;
+    font-size: 27px;
+    text-align: center;
+}
+
+.createModelbuttom:hover{
+    color:#005fff
+}
+
 /***
 Step Form
 **/
@@ -168,3 +216,4 @@ Step Form
   .step.finish {
     background-color: #4CAF50;
   }
+

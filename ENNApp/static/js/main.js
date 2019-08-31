@@ -250,3 +250,186 @@ $("input[type=checkbox][name='deleteCols[]']").change(function() {
     $("#oneHotLabel"+colum).removeClass("crossLine");
   }
 });
+
+
+
+/**
+ * Create Model View
+ */
+
+$(document).ready(function() {
+    $('.selectDatasetTable').DataTable({
+      "columns": [
+        { "orderable": true },
+        { "orderable": true },
+        { "orderable": true },
+        { "orderable": false }
+      ]
+    });
+});
+
+
+$(document).ready(function(){
+  $( "#selectTargetButtom" ).click(function() {
+    
+    $(".selectTargetModelView").hide("slow");
+    var numberSelectTargets = $("input:checkbox:checked[name='targetsToModel[]']").length;
+    var numberOfElements = $("input:checkbox[name='targetsToModel[]']").length;
+    console.log(numberSelectTargets);
+    $("#firstDimNumber").val(numberOfElements - numberSelectTargets);
+    $("#lastDimNumber").val(numberSelectTargets);
+    
+    $("#mainModelCreation").show("slow");
+
+  });
+});
+
+
+function addModelElement(name){
+  var elementNumber = ($(".modelElement").length)+1;
+  var element =   '<div class="alert alert-dismissible alert-success modelElement">'
+                +   '<button type="button" class="close" onclick="deletLayerRow(\'' + name +'\');" data-dismiss="alert" style="color: red;">×</button>'
+                +   '<strong>Model: </strong><span> ' + name + '</span>'
+                + '</div>';
+  $("#modelsDiv").append(element);
+  $("#executeModelButtom").show("slow");
+}
+
+
+function executeModels(){
+  data = JSON.stringify(models);
+
+  var targetsNames = [];
+  var dataNames = [];
+  
+  $("input:checkbox:checked[name='targetsToModel[]']").each(function(){
+    targetsNames.push($(this).val());
+  });
+  
+  $("input:checkbox:not(:checked)[name='targetsToModel[]']").each(function(){
+    dataNames.push($(this).val());
+  });
+  
+  var rowData = JSON.stringify({
+    targetsNames: targetsNames,
+    dataNames, dataNames
+  });
+
+  $.post(executeModelUrl, 
+    {
+      data: data,
+      rowData: rowData,
+      datasetName: datasetName,
+      csrfmiddlewaretoken: csrftoken
+    },
+    function(htmlexterno){
+        console.log(htmlexterno);
+    });
+}
+
+
+
+function addLayerRow(){
+  layerRow = '<div class="form-row layerRow">'
+            +'  <div class="col-md-2 mb-3">'
+            +'        <label>Dimensiones</label>'
+            +'        <input class="form-control form-control" type="number" value="1" min="1" name="dimNumber">'
+            +'    </div>'
+            +'      <div class="form-group col-md-6">'
+            +'        <label>Activation Funtion</label>'
+            +'        <select class="form-control" name="activationFuntion">'
+            +'          <option value="softmax">Softmax</option>'
+            +'          <option value="elu">Exponential Linear Unit (Elu)</option>'
+            +'          <option value="selu">Scaled Exponential Linear Unit (Selu)</option>'
+            +'          <option value="softplus">Softplus</option>'
+            +'          <option value="softsign">Softsign</option>'
+            +'          <option value="relu">Rectified Linear Unit (Relu)</option>'
+            +'          <option value="tanh">Hyperbolic Tangent Activation Function (Tanh)</option>'
+            +'          <option value="sigmoid">Sigmoid</option>'
+            +'          <option value="hard_sigmoid">Hard Sigmoid</option>'
+            +'          <option value="exponential">Exponential (Base e)</option>'
+            +'         <option value="linear">Linear (Identity)</option>'
+            +'       </select>'
+            +'     </div>'
+            +'    <div class="form-group col-md-1">'
+            +'      <button type="button" class="btn btn-danger deleteLayerButtom" onclick="deleteLayer(this);" deleteLayerButtom">Delete</button>'
+            +'    </div>'
+            +'  </div>'
+
+  $("#layerContainer").append(layerRow);
+}
+
+
+
+function deleteLayer(buttom){
+  $(buttom).closest('.layerRow').remove();
+}
+
+function resetLayers(){
+  $("#modelName").val("");
+  $('.layerRow').remove();
+}
+
+var models = {};
+
+function saveModel(){
+  var modelName = $("#modelName").val();
+  if(modelName == ""){
+    $("#msjErrorName").show();
+    $("#modelName").addClass("is-invalid");
+    $("#msjErrorNameText").text("The model name can't be empty");
+  }else{
+    if(nameExist(modelName)){
+      $("#msjErrorName").show();
+      $("#modelName").addClass("is-invalid");
+      $("#msjErrorNameText").text("This model's name already exist");
+    }else{
+      $("#modelName").removeClass("is-invalid");
+      $("#msjErrorName").hide();
+      
+      var hidenLayers = {};
+      $(".layerRow").each(function(index){ 
+        hidenLayers[index] = {
+          dimNumber: $(this).find('input').val(),
+          activation: $(this).find('select').val()
+        }
+      });
+      
+      var model = {
+        modelName: modelName,
+        firstDimNumber: $("#firstDimNumber").val(),
+        firstActivation: $("#firstActivationFuntion").val(),
+        lastDimNumber: $("#lastDimNumber").val(),
+        lastActivation: $("#lastActivationFuntion").val(),
+        lossFuntion: $('input:radio[name=lossFuntion]:checked').val(),
+        optimicer: $('input:radio[name=optimicer]:checked').val(),
+        epochs: $("#epochs").val(),
+        batchSize: $("#batchSize").val(),
+        hidenLayers: hidenLayers,
+      }
+
+      models[modelName] = model;
+      resetLayers();
+      addModelElement(modelName);    
+    }
+    
+  }
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  //window.scrollTo(0,0);
+}
+
+
+function deletLayerRow(name){
+  delete models[name];
+}
+
+
+function nameExist(name){
+  for (modelName in models){
+    if(modelName == name){
+      return true;
+    }
+  }
+  return false;
+}

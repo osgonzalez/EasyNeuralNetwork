@@ -10,6 +10,8 @@ from django.contrib.auth.models import User as userModel
 from django.contrib.auth.decorators import login_required
 import os, time
 import math
+from ..common import preprocessing
+import json
 
 
 
@@ -83,3 +85,50 @@ def loadContextMessages(request,context):
     if 'messageOk' in request.session:
         context.update({"messageOk": request.session['messageOk']})
         del request.session['messageOk']
+
+
+@login_required(login_url='/login/')
+def createModel(request, fileName, oldContext={}):
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    dataSetsPath = os.path.join(BASE_DIR, "userFiles", request.user.username , "datasets", fileName)
+
+    context = {}
+    context.update(oldContext)
+
+    if not os.path.exists(dataSetsPath):
+        context.update({'secondaryMessageErr': "this file does not exist"})
+    else:
+       
+        try:
+            toRet = preprocessing.getColsNames(dataSetsPath)
+            context.update(toRet)
+
+        except BaseException as e:
+            context.update({"messageErr": "An error occurred reading the file (" + str(e) +")"})
+    
+    loadContextMessages(request,context)
+    context.update({"datasetName": fileName})
+    return render(request, 'ENNApp/createModel.html', context)
+
+
+
+@login_required(login_url='/login/')
+def executeModel(request):
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    dataSetsPath = os.path.join(BASE_DIR, "userFiles", request.user.username , "datasets", request.POST["datasetName"])
+
+    context = {}
+
+    if not os.path.exists(dataSetsPath):
+        context.update({'secondaryMessageErr': "this file does not exist"})
+    else:
+        try:       
+            models = json.loads(request.POST["data"])
+            rowData = json.loads(request.POST["rowData"])
+            toRet = preprocessing.executeModel(models, rowData, dataSetsPath)
+            context.update(toRet)
+
+        except BaseException as e:
+            context.update({"messageErr": "An error occurred (" + str(e) +")"})
+
+    return HttpResponse("Oks! -> ")

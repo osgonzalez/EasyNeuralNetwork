@@ -31,7 +31,7 @@ def addDataset(request):
 @login_required(login_url='/login/')
 def listDatasets(request):
     downloadDataSetUrl = "/files/" + request.user.username + "/datasets/"
-    deleteDataSetUrl = "/deleteDataset/" + request.user.username + "/" #ToDO Cambiar a todos para Admin
+    deleteDataSetUrl = "/deleteDataset/" + request.user.username + "/" 
 
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     dataSetsPath = os.path.join(BASE_DIR, "userFiles", request.user.username , "datasets")
@@ -180,3 +180,30 @@ def principalComponentAnalysis(request):
             return redirect('listDatasets')
     
     return showDatasetSample( request=request, fileName=context['datasetName'], oldContext=context)
+
+
+@login_required(login_url='/login/')
+def selectDataset(request):
+
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    dataSetsPath = os.path.join(BASE_DIR, "userFiles", request.user.username , "datasets")
+
+    context = {}
+
+    if not os.path.exists(dataSetsPath):
+        context.update({'secondaryMessageWarning': "You haven't any dataset yet"})
+    else:
+        datasets = []
+        for file in os.listdir(dataSetsPath):
+            filepath = os.path.join(dataSetsPath, file)
+            if os.path.isfile(filepath):
+                datasets.append({
+                    "name": file,  
+                    "creationDate": time.ctime(os.path.getctime(filepath)), 
+                    "size": convert_size(os.path.getsize(filepath))})
+                         
+        context.update({'datasets': datasets})
+    
+    loadContextMessages(request,context)
+    
+    return render(request, 'ENNApp/selectDataSet.html', context)

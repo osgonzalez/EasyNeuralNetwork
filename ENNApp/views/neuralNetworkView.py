@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 import os, time
 import math
 from ..common import preprocessing
+from ..common import neural
 import json
 
 
@@ -116,7 +117,7 @@ def createModel(request, fileName, oldContext={}):
 def executeModel(request):
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     dataSetsPath = os.path.join(BASE_DIR, "userFiles", request.user.username , "datasets", request.POST["datasetName"])
-
+    userFolderPath = os.path.join(BASE_DIR, "userFiles", request.user.username)
     context = {}
 
     if not os.path.exists(dataSetsPath):
@@ -125,7 +126,7 @@ def executeModel(request):
         try:       
             models = json.loads(request.POST["data"])
             rowData = json.loads(request.POST["rowData"])
-            toRet = preprocessing.executeModel(models, rowData, dataSetsPath)
+            toRet = neural.executeModel(models, rowData, dataSetsPath, userFolderPath)
             context.update(toRet)
 
         except BaseException as e:

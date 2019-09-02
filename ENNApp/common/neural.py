@@ -11,7 +11,7 @@ import tensorflow
 import keras
 from keras.models import Sequential
 from keras.layers.core import Dense
-from .untils import readDataset, writeDataset, writeFile, createDirIfNotExist
+from .untils import readDataset, writeDataset, writeFile, createDirIfNotExist, readFile, writeFileWithJson
 
 #from sklearn.model_selection import StratifiedKFold
 #kfold = StratifiedKFold(n_splits=10, shuffle=True, random_state=5)
@@ -88,7 +88,7 @@ def executeModel(models, rowData, datasetPath, userFolderPath):
 
             #Create info File
             infoFileName = str(modelName).rstrip('.csv') + ".info"
-            writeFile(str(models[modelName]), infoFolderPath, infoFileName)
+            writeFileWithJson(models[modelName], infoFolderPath, infoFileName)
             
 
         except BaseException as e:
@@ -97,6 +97,8 @@ def executeModel(models, rowData, datasetPath, userFolderPath):
                 toRet.update({"messageErr": "An error occurred in Model " + modelName})
             else:
                 toRet.update({"messageErr": toRet["messageErr"] + ", " + modelName})
+    
+    return toRet
     
  
 
@@ -167,3 +169,9 @@ def generateCode(model):
     code += '    print(model.summary())\n'
 
     return code
+
+
+def readInfoFile(filePath):
+    content = readFile(filePath)
+
+    return content

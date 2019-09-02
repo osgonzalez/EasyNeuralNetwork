@@ -6,12 +6,12 @@
 <ul class="nav nav-tabs">
     <li class="nav-item col-sm ">
       <a class="nav-link active text-center" data-toggle="tab" href="#DataSetSampleTab" style="">
-         <h5>Dataset Basic Info</h5>
+         <h5>Dataset Basic Information</h5>
         </a>
     </li>
     <li class="nav-item col-sm">
       <a class="nav-link text-center" data-toggle="tab" href="#prepQuestions" style="">
-        <h5>Prepocesado preguntas</h5>
+        <h5>Preprocessing</h5>
     </a>
     </li>
     <li class="nav-item col-sm">
@@ -79,7 +79,7 @@
         <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    preguntas de preprocesado 
+                    Pre-Processing
                 </div>
                 <div class="card-body">
                         <div class="stepForm">
@@ -90,7 +90,7 @@
                                     <!--Tab-->
                                     <div class="tabStep">            
                                     <div class="form-group">
-                                        <h4>Que deseas hacer?</h4>
+                                        <h4>Where do you want save the file?</h4>
                                         <div class="custom-control custom-radio">
                                             <input type="radio" id="radioOverwriteFile" name="OverwriteFile" class="custom-control-input" value="True" checked>
                                             <label class="custom-control-label" for="radioOverwriteFile">Overwrite current file ("{{datasetName}}")</label>
@@ -109,7 +109,7 @@
                                 <!--Tab-->
                                 <div class="tabStep">            
                                     <div class="form-group">
-                                        <h4>Desea eleimnar alguna columna?</h4>
+                                        <h4>Do you want to delete some column?</h4>
                                         {% for coll in collNames %}
                                             <div class="custom-control custom-switch">
                                                 <input type="checkbox" class="deleteColsCheck custom-control-input" id="deleteCol{{ forloop.counter }}" name='deleteCols[]' value="{{coll}}">
@@ -122,7 +122,7 @@
                                 <!--Tab-->
                                 <div class="tabStep">            
                                         <div class="form-group">
-                                            <h4>Que deseas hacer?</h4>
+                                            <h4>What technique do you want to use to normalize the data?</h4>
                                             <div class="custom-control custom-radio">
                                                     <input type="radio"  name="normalize" id="normalizeC" class="custom-control-input" value="Scale" checked>
                                                     <label class="custom-control-label" for="normalizeC">Scale</label>
@@ -148,7 +148,7 @@
                                 <!--Tab-->
                                 <div class="tabStep">            
                                     <div class="form-group">
-                                        <h4>En que columnas categoricas queires realizar One-hot encoding (Esto es usado para datos categoricos)</h4>
+                                        <h4>In which columns do you want to perform One-hot encoding (This is used only for categorical data)</h4>
                                         {% for coll in collNames %}
                                             <div class="custom-control custom-switch">
                                                 <input type="checkbox" class="custom-control-input {% if coll in categoricCols %} categoric {% endif %}" id="oneHot{{coll}}" name='oneHotList[]' value="{{coll}}" {% if coll in categoricCols%} checked disabled {% endif %}>

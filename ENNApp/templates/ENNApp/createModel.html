@@ -7,23 +7,31 @@
     // using jQuery
     var executeModelUrl = "{% url 'executeModel' %}";
     var datasetName = "{{datasetName}}";
+    var urlSucess = "{% url 'listNeuralNetwork' %}";
 
 </script>
 <!--End executeModel Url-->
 
 <div class="form-group selectTargetModelView">
-    <h4>Elije el target!</h4>
-    <div class="form-group">
-        {% for coll in collNames %}
-        <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="targetColl{{ forloop.counter }}"
-                name='targetsToModel[]' value="{{coll}}">
-            <label class="custom-control-label" for="targetColl{{ forloop.counter }}">{{coll}}</label>
+    <div class="card mb-3">
+        <div class="card-header">
+            <h4>Please, select the targets:</h4>
         </div>
-        {% endfor %}
-        <br>
-        <div>
-            <button type="submit" class="btn btn-success" id="selectTargetButtom">Confirm</button>
+        <div class="card-body">
+
+            <div class="form-group">
+                {% for coll in collNames %}
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="targetColl{{ forloop.counter }}"
+                        name='targetsToModel[]' value="{{coll}}">
+                    <label class="custom-control-label" for="targetColl{{ forloop.counter }}">{{coll}}</label>
+                </div>
+                {% endfor %}
+                <br>
+                <div>
+                    <button type="submit" class="btn btn-success" id="selectTargetButtom">Confirm</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -59,7 +67,7 @@
                     </div>
                     <div class="form-row">
                         <div class="col-md-2 mb-3">
-                            <label>Dimensiones</label>
+                            <label>Dimensions</label>
                             <input class="form-control form-control" type="number" value="1" min="1"
                                 name="firstDimNumber" id="firstDimNumber" readonly>
                         </div>
@@ -90,7 +98,7 @@
                         layer</button>
                     <div class="form-row">
                         <div class="col-md-2 mb-3">
-                            <label>Dimensiones</label>
+                            <label>Dimensions</label>
                             <input class="form-control form-control" type="number" value="1" min="1"
                                 name="lastDimNumber" id="lastDimNumber" readonly>
                         </div>
@@ -142,7 +150,8 @@
                             <div class="custom-control custom-radio">
                                 <input type="radio" name="lossFuntion" id="optimicersquared_hinge"
                                     class="custom-control-input" value="squared_hinge">
-                                <label class="custom-control-label" for="optimicersquared_hinge">Squared Hinge</label>
+                                <label class="custom-control-label" for="optimicersquared_hinge">Squared
+                                    Hinge</label>
                             </div>
                             <div class="custom-control custom-radio">
                                 <input type="radio" name="lossFuntion" id="optimicerhinge" class="custom-control-input"
@@ -153,7 +162,8 @@
                             <div class="custom-control custom-radio">
                                 <input type="radio" name="lossFuntion" id="optimicerlogcosh"
                                     class="custom-control-input" value="logcosh">
-                                <label class="custom-control-label" for="optimicerlogcosh">Logarithm of the hyperbolic
+                                <label class="custom-control-label" for="optimicerlogcosh">Logarithm of the
+                                    hyperbolic
                                     cosine </label>
                             </div>
                             <label style="margin-left: 24px;">of the prediction error (Logcosh)</label>
@@ -268,4 +278,24 @@
 </div>
 <br>
 <br>
+
+<!-- Modal -->
+<div class="modal fade" id="waitingModal" tabindex="-1" role="dialog" aria-labelledby="Executing Models"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title centerMargin">Executing Models</h3>
+            </div>
+            <div class="modal-body">
+                    <h5 class="modal-title centerDiv">please wait</h5>
+                    <br>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,0 +1,63 @@
+{% extends './baseTemplate.html' %}
+
+{% block mainBlock %}
+
+
+<div class="form-group">
+    <div class="card mb-3">
+        <div class="card-header">
+            <h4>Details of the neural network</h4>
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="firstRow">
+                    <h4>Name</h4>
+                    <p>{{modelName}}</p>
+                    <h4>Input Layer</h4>
+                    <p class="detailParagraph"><span class="blueSpan">Dim: </span>{{firstDimNumber}}</p>
+                    <p><span class="blueSpan">Activation: </span>{{firstActivation}}</p>
+
+                    {% for key, value in hidenLayers.items %}
+                    <h4>Hidden Layer {{ forloop.counter }}</h4>
+                    <p class="detailParagraph"><span class="blueSpan">Dim: </span>{{value.dimNumber}}</p>
+                    <p><span class="blueSpan">Activation: </span>{{value.activation}}</p>
+                    {% endfor %}
+
+                    <h4>Output Layer</h4>
+                    <p class="detailParagraph"><span class="blueSpan">Dim: </span>{{lastDimNumber}}</p>
+                    <p><span class="blueSpan">Activation: </span>{{lastActivation}}</p>
+                </div>
+                <div class="secondRow">
+                    <h4>Loss Function</h4>
+                    <p>{{lossFuntion}}</p>
+
+                    <h4>Optimicer</h4>
+                    <p>{{optimicer}}</p>
+
+                    <h4>Epochs</h4>
+                    <p>{{epochs}}</p>
+
+                    <h4>Batch Size</h4>
+                    <p>{{batchSize}}</p>
+
+                    <h4>Loss Value</h4>
+                    <p>{{lossVal}}</p>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<button type="button" onclick="location.href='{% url 'listNeuralNetwork' %}';" class="btn btn-primary centerButtom">Go
+    Back</button>
+<br>
+<br>
+
+
+
+
+{% endblock %}

@@ -46,6 +46,22 @@
     text-align:center;
 }
 
+.blueSpan{
+    color: #2FA4E7;
+}
+
+.detailParagraph{
+    margin-bottom: 1px;
+}
+
+.secondRow{
+    margin-left: 150px;
+}
+
+.centerMargin{
+    margin: auto;
+}
+
 #executeModelButtom{
     display: none;
     text-align: center;
@@ -98,11 +114,20 @@
 
 .downloadbuttom{
     padding: 12px;
-    color:#6c81f7
+    color:#6c81f7;
 }
 
 .downloadbuttom:hover{
-    color:#0026ff
+    color:#0026ff;
+}
+
+.downloadCode{
+    padding-left: 12px;
+    color:#ffc650;
+}
+
+.downloadCode:hover{
+    color:#d79d27;
 }
 
 .deletebuttom{

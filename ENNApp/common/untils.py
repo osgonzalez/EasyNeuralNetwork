@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import json
 
 def readDataset(datasetPath):
     return pd.read_csv(datasetPath, header=0)
@@ -20,3 +21,15 @@ def writeFile(source,dir, filename):
 def createDirIfNotExist(dir):
     if not os.path.isdir(dir):
         os.makedirs(dir)
+
+def readFile(filePath):
+    f=open(filePath, "r")
+    contents =f.read()
+    f.close()
+    return contents
+
+
+def writeFileWithJson(source,dir, filename):
+    #source = json.dumps(str(source))
+    source = json.dumps(source)
+    writeFile(source,dir, filename) 

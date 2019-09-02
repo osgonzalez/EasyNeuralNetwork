@@ -297,6 +297,7 @@ function addModelElement(name){
 
 
 function executeModels(){
+  $("#waitingModal").modal("show");
   data = JSON.stringify(models);
 
   var targetsNames = [];
@@ -324,6 +325,7 @@ function executeModels(){
     },
     function(htmlexterno){
         console.log(htmlexterno);
+        location.href=urlSucess;
     });
 }
 
@@ -332,7 +334,7 @@ function executeModels(){
 function addLayerRow(){
   layerRow = '<div class="form-row layerRow">'
             +'  <div class="col-md-2 mb-3">'
-            +'        <label>Dimensiones</label>'
+            +'        <label>Dimensions</label>'
             +'        <input class="form-control form-control" type="number" value="1" min="1" name="dimNumber">'
             +'    </div>'
             +'      <div class="form-group col-md-6">'

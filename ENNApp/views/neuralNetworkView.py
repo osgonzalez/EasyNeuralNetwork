@@ -35,7 +35,29 @@ def listNeuralNetwork(request):
         for file in os.listdir(neuralNetworkPath):
             filepath = os.path.join(neuralNetworkPath, file)
             if os.path.isfile(filepath):
-                neuralNetworks.append({"name": file, "userOwner": request.user.username , "creationDate": time.ctime(os.path.getctime(filepath)), "size": convert_size(os.path.getsize(filepath)), "url": ( downloadNeuralNetworkUrl + file), "deleteUrl": deleteNeuralNetworkUrl + file + "/"})
+                #Get Code and Model
+                codeUrl = ""
+                infoUrl = ""
+                fileBaseName = str(file).rstrip('.HDF5')
+                modelPath = os.path.join(BASE_DIR, "userFiles", request.user.username, "model", "code", (fileBaseName + ".py"))
+                infoPath = os.path.join(BASE_DIR, "userFiles", request.user.username , "model", "info", (fileBaseName + ".info"))
+                
+                if(os.path.exists(modelPath)):
+                    codeUrl = "/files/" + request.user.username + "/model/code/" + (fileBaseName + ".py")
+                if(os.path.exists(infoPath)):
+                    infoUrl = "/files/" + request.user.username + "/model/info/" + (fileBaseName + ".info")
+
+                #Append Data
+                neuralNetworks.append({
+                    "name": file, 
+                    "userOwner": request.user.username , 
+                    "creationDate": time.ctime(os.path.getctime(filepath)), 
+                    "size": convert_size(os.path.getsize(filepath)), 
+                    "url": ( downloadNeuralNetworkUrl + file), 
+                    "deleteUrl": deleteNeuralNetworkUrl + file + "/",
+                    "infoUrl": infoUrl,
+                    "codeUrl": codeUrl
+                    })
         
         if request.user.is_superuser:
             baseNeuralNetworkPath = os.path.join(BASE_DIR, "userFiles")
@@ -47,7 +69,29 @@ def listNeuralNetwork(request):
                     for file in os.listdir(userNetworkPath):
                         filepath = os.path.join(userNetworkPath, file)
                         if os.path.isfile(filepath):
-                            neuralNetworks.append({"name": file, "userOwner": userDir , "creationDate": time.ctime(os.path.getctime(filepath)), "size": convert_size(os.path.getsize(filepath)), "url": ( downloadNeuralNetworkUrl + file), "deleteUrl": deleteNeuralNetworkUrl + file + "/"})
+                            #Get Code and Model
+                            codeUrl = ""
+                            infoUrl = ""
+                            fileBaseName = str(file).rstrip('.HDF5')
+                            modelPath = os.path.join(BASE_DIR, "userFiles", userDir, "model", "code", (fileBaseName + ".py"))
+                            infoPath = os.path.join(BASE_DIR, "userFiles", userDir , "model", "info", (fileBaseName + ".info"))
+                            
+                            if(os.path.exists(modelPath)):
+                                codeUrl = "/files/" + userDir + "/model/code/" + (fileBaseName + ".py")
+                            if(os.path.exists(infoPath)):
+                                infoUrl = "/files/" + userDir + "/model/info/" + (fileBaseName + ".info")
+
+                            #Append Data
+                            neuralNetworks.append({
+                                "name": file, 
+                                "userOwner": userDir , 
+                                "creationDate": time.ctime(os.path.getctime(filepath)), 
+                                "size": convert_size(os.path.getsize(filepath)), 
+                                "url": ( downloadNeuralNetworkUrl + file), 
+                                "deleteUrl": deleteNeuralNetworkUrl + file + "/",
+                                "infoUrl": infoUrl,
+                                "codeUrl": codeUrl
+                                })
         
              
         context.update({'neuralNetworks': neuralNetworks})
@@ -62,7 +106,16 @@ def deleteNeuralNetwork(request, userName, fileName):
         if request.user.is_superuser or request.user.username == userName:
             BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
             neuralNetworkPath = os.path.join(BASE_DIR, "userFiles", userName , "neuralNetwork", fileName)
+            fileBaseName = str(fileName).rstrip('.HDF5')
+            modelPath = os.path.join(BASE_DIR, "userFiles", userName, "model", "code", (fileBaseName + ".py"))
+            infoPath = os.path.join(BASE_DIR, "userFiles", userName , "model", "info", (fileBaseName + ".info"))
+            
             os.remove(neuralNetworkPath)
+            if(os.path.exists(modelPath)):
+                os.remove(modelPath)
+            if(os.path.exists(infoPath)):
+                os.remove(infoPath)
+
             request.session['messageOk'] = "Neural Network was deleted successfully"
         else:
             request.session['messageErr'] = "You don't have enough permissions to do this action"
@@ -121,15 +174,49 @@ def executeModel(request):
     context = {}
 
     if not os.path.exists(dataSetsPath):
-        context.update({'secondaryMessageErr': "this file does not exist"})
+        context.update({'messageErr': "this dataset does not exist"})
     else:
         try:       
             models = json.loads(request.POST["data"])
             rowData = json.loads(request.POST["rowData"])
             toRet = neural.executeModel(models, rowData, dataSetsPath, userFolderPath)
             context.update(toRet)
+            
+
 
         except BaseException as e:
             context.update({"messageErr": "An error occurred (" + str(e) +")"})
 
-    return HttpResponse("Oks! -> ")
+    if 'messageErr' not in context:
+        request.session['messageOk'] = "All models have been executed successfully"
+    else:
+        request.session['messageErr'] = context["messageErr"]
+
+    return HttpResponse("Ok")
+
+
+@login_required(login_url='/login/')
+def detailNeuralNetwork(request, fileName):
+    fileBaseName = str(fileName).rstrip('.HDF5')
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    infoPath = os.path.join(BASE_DIR, "userFiles", request.user.username , "model", "info", (fileBaseName + ".info"))
+                
+    context = {}
+
+    if not os.path.exists(infoPath):
+        context.update({'secondaryMessageErr': "this file does not exist"})
+    else:
+       
+        try:
+            toRet = neural.readInfoFile(infoPath)
+            print(str(toRet))
+            data = json.loads(toRet)
+            print(type(data))
+            context.update(data)
+
+        except BaseException as e:
+            context.update({"messageErr": "An error occurred reading the file (" + str(e) +")"})
+    
+    loadContextMessages(request,context)
+    context.update({"datasetName": fileName})
+    return render(request, 'ENNApp/neuralNetworkDetail.html', context)
